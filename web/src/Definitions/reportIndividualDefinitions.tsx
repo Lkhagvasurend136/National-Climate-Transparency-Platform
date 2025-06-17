@@ -132,6 +132,7 @@ export type ReportTwelveRecord = {
   requiredAmountDomestic: number;
   requiredAmount: number;
   activityStatus: string;
+  etfDescription: string;
   additionalInfo: string;
 };
 

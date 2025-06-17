@@ -459,6 +459,7 @@ const reportList = () => {
             requiredAmountDomestic: Math.round(report.requiredAmountDomestic) ?? [],
             requiredAmount: Math.round(report.requiredAmount),
             activityStatus: report.status,
+            etfDescription: report.etfDescription,
             additionalInfo: report.etfDescription,
           });
         });

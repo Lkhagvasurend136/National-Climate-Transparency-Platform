@@ -575,6 +575,7 @@ export const getReportTwelveColumns = (t: any) => {
       ],
     },
     { title: t('activityStatus'), dataIndex: 'activityStatus', key: 'activityStatus', width: 100 },
+    { title: t('etfDescription'), dataIndex: 'etfDescription', key: 'etfDescription', width: 100 },
     { title: t('additionalInfo'), dataIndex: 'additionalInfo', key: 'additionalInfo', width: 150 },
   ];
 
