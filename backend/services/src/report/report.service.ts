@@ -23,405 +23,486 @@ import { SupportDirection } from "../enums/support.enum";
 import { ActionType } from "src/enums/action.enum";
 
 export class ReportService {
-	constructor(
-		@InjectRepository(ReportFiveViewEntity) private reportFiveViewRepo: Repository<ReportFiveViewEntity>,
-		@InjectRepository(AnnexThreeViewEntity) private annexThreeViewRepo: Repository<AnnexThreeViewEntity>,
-		private helperService: HelperService,
-		private dataExportService: DataExportService,
-	) { }
+  constructor(
+    @InjectRepository(ReportFiveViewEntity)
+    private reportFiveViewRepo: Repository<ReportFiveViewEntity>,
+    @InjectRepository(AnnexThreeViewEntity)
+    private annexThreeViewRepo: Repository<AnnexThreeViewEntity>,
+    private helperService: HelperService,
+    private dataExportService: DataExportService
+  ) {}
 
-	async getTableData(id: Reports, query: QueryDto,) {
-		const queryBuilder = this.getReportQueryBuilder(id);
+  async getTableData(id: Reports, query: QueryDto) {
+    const queryBuilder = this.getReportQueryBuilder(id);
 
-		if (query.size && query.page) {
-			queryBuilder.offset(query.size * query.page - query.size)
-				.limit(query.size);
-		}
+    if (query.size && query.page) {
+      queryBuilder
+        .offset(query.size * query.page - query.size)
+        .limit(query.size);
+    }
 
-		const resp = await queryBuilder.getManyAndCount();
+    const resp = await queryBuilder.getManyAndCount();
 
-		return new DataListResponseDto(
-			resp.length > 0 ? resp[0] : undefined,
-			resp.length > 1 ? resp[1] : undefined
-		);
-	}
+    return new DataListResponseDto(
+      resp.length > 0 ? resp[0] : undefined,
+      resp.length > 1 ? resp[1] : undefined
+    );
+  }
 
-	getReportQueryBuilder(reportNumber: Reports) {
-		if (reportNumber === Reports.FIVE) {
-				return this.reportFiveViewRepo.createQueryBuilder("reportFive");
-		} else {
-			let direction: SupportDirection;
-			let mitigationType: ActionType[];
-			// ML - removed ActionType.TRANSPARENCY in SIX and SEVEN and Add it to TWELVE and THIRTEEN
-			switch(reportNumber){
-				case Reports.SIX:
-					direction = SupportDirection.NEEDED;
-					mitigationType = [ActionType.MITIGATION, ActionType.ADAPTION, ActionType.CROSSCUT, ActionType.OTHER];
-					break;
-				case Reports.SEVEN:
-					direction = SupportDirection.RECEIVED;
-					mitigationType = [ActionType.MITIGATION, ActionType.ADAPTION, ActionType.CROSSCUT, ActionType.OTHER];
-					break;
-				case Reports.EIGHT:
-					direction = SupportDirection.NEEDED;
-					mitigationType = [ActionType.MITIGATION, ActionType.ADAPTION, ActionType.CROSSCUT, ActionType.OTHER];
-					break;
-				case Reports.NINE:
-					direction = SupportDirection.RECEIVED;
-					mitigationType = [ActionType.MITIGATION, ActionType.ADAPTION, ActionType.CROSSCUT, ActionType.OTHER];
-					break;
-				case Reports.TEN:
-					direction = SupportDirection.NEEDED;
-					mitigationType = [ActionType.MITIGATION, ActionType.ADAPTION, ActionType.CROSSCUT, ActionType.OTHER];
-					break;
-				case Reports.ELEVEN:
-					direction = SupportDirection.RECEIVED;
-					mitigationType = [ActionType.MITIGATION, ActionType.ADAPTION, ActionType.CROSSCUT, ActionType.OTHER];
-					break;
-				case Reports.TWELVE:
-					direction = SupportDirection.NEEDED;
-					mitigationType = [ActionType.TRANSPARENCY];
-					break;
-				case Reports.THIRTEEN:
-					direction = SupportDirection.RECEIVED;
-					mitigationType = [ActionType.TRANSPARENCY];
-					break;
-			}
+  getReportQueryBuilder(reportNumber: Reports) {
+    if (reportNumber === Reports.FIVE) {
+      return this.reportFiveViewRepo.createQueryBuilder("reportFive");
+    } else {
+      let direction: SupportDirection;
+      let mitigationType: ActionType[];
+      let meansOfImplementation: ImpleMeans;
+      // ML - removed ActionType.TRANSPARENCY in SIX and SEVEN and Add it to TWELVE and THIRTEEN
+      switch (reportNumber) {
+        case Reports.SIX:
+          direction = SupportDirection.NEEDED;
+          mitigationType = [
+            ActionType.MITIGATION,
+            ActionType.ADAPTION,
+            ActionType.CROSSCUT,
+            ActionType.OTHER,
+          ];
+          meansOfImplementation = ImpleMeans.FINANCE;
+          break;
+        case Reports.SEVEN:
+          direction = SupportDirection.RECEIVED;
+          mitigationType = [
+            ActionType.MITIGATION,
+            ActionType.ADAPTION,
+            ActionType.CROSSCUT,
+            ActionType.OTHER,
+          ];
+          meansOfImplementation = ImpleMeans.FINANCE;
+          break;
+        case Reports.EIGHT:
+          direction = SupportDirection.NEEDED;
+          mitigationType = [
+            ActionType.MITIGATION,
+            ActionType.ADAPTION,
+            ActionType.CROSSCUT,
+            ActionType.OTHER,
+          ];
+          meansOfImplementation = ImpleMeans.TECH_DEV;
+          break;
+        case Reports.NINE:
+          direction = SupportDirection.RECEIVED;
+          mitigationType = [
+            ActionType.MITIGATION,
+            ActionType.ADAPTION,
+            ActionType.CROSSCUT,
+            ActionType.OTHER,
+          ];
+          meansOfImplementation = ImpleMeans.TECH_DEV;
+          break;
+        case Reports.TEN:
+          direction = SupportDirection.NEEDED;
+          mitigationType = [
+            ActionType.MITIGATION,
+            ActionType.ADAPTION,
+            ActionType.CROSSCUT,
+            ActionType.OTHER,
+          ];
+          meansOfImplementation = ImpleMeans.CAPACITY_BUILD;
+          break;
+        case Reports.ELEVEN:
+          direction = SupportDirection.RECEIVED;
+          mitigationType = [
+            ActionType.MITIGATION,
+            ActionType.ADAPTION,
+            ActionType.CROSSCUT,
+            ActionType.OTHER,
+          ];
+          meansOfImplementation = ImpleMeans.CAPACITY_BUILD;
+          break;
+        case Reports.TWELVE:
+          direction = SupportDirection.NEEDED;
+          mitigationType = [ActionType.TRANSPARENCY];
+          meansOfImplementation = ImpleMeans.TRANSP;
+          break;
+        case Reports.THIRTEEN:
+          direction = SupportDirection.RECEIVED;
+          mitigationType = [ActionType.TRANSPARENCY];
+          meansOfImplementation = ImpleMeans.TRANSP;
+          break;
+      }
 
-			let mitigationCondition = '';
+      let mitigationCondition = "";
 
-			mitigationType.forEach((mitigation, index) => {
-				mitigationCondition = index > 0 ? 
-					`${mitigationCondition} OR annex_three.type = '${mitigation}'` : 
-					`annex_three.type = '${mitigation}'`
-			});
+      mitigationType.forEach((mitigation, index) => {
+        mitigationCondition =
+          index > 0
+            ? `${mitigationCondition} OR annex_three.type = '${mitigation}'`
+            : `annex_three.type = '${mitigation}'`;
+      });
 
-			mitigationCondition = `(${mitigationCondition})`
+      mitigationCondition = `(${mitigationCondition})`;
 
-			return this.annexThreeViewRepo
-					   .createQueryBuilder("annex_three")
-					   .where("annex_three.direction = :direction", { direction: direction })
-					   .andWhere(mitigationCondition)
-		}
-	}
+      const qb = this.annexThreeViewRepo
+        .createQueryBuilder("annex_three")
+        .where("annex_three.direction = :direction", { direction: direction })
+        .andWhere("annex_three.meansOfImplementation = :meansOfImplementation", {
+          meansOfImplementation: meansOfImplementation,
+        })
+        .andWhere(mitigationCondition);
+      return qb;
+    }
+  }
 
-	async downloadReportData(tableNumber: Reports, dataExportQueryDto: DataExportQueryDto) {
-		const resp = await this.getReportQueryBuilder(tableNumber).getMany();
+  async downloadReportData(
+    tableNumber: Reports,
+    dataExportQueryDto: DataExportQueryDto
+  ) {
+    const resp = await this.getReportQueryBuilder(tableNumber).getMany();
 
-		if (resp.length > 0) {
-			let prepData;
-			let localFileName;
-			let localTableNameKey;
+    if (resp.length > 0) {
+      let prepData;
+      let localFileName;
+      let localTableNameKey;
 
-			switch (tableNumber) {
-				case Reports.FIVE:
-					prepData = this.prepareReportFiveDataForExport(resp as ReportFiveViewEntity[]);
-					localFileName = "reportExport.";
-					localTableNameKey = "reportExport.tableFive";
-					break;
+      switch (tableNumber) {
+        case Reports.FIVE:
+          prepData = this.prepareReportFiveDataForExport(
+            resp as ReportFiveViewEntity[]
+          );
+          localFileName = "reportExport.";
+          localTableNameKey = "reportExport.tableFive";
+          break;
 
-				case Reports.SIX:
-					prepData = this.prepareReportSixDataForExport(resp as AnnexThreeViewEntity[]);
-					localFileName = "reportSixExport.";
-					localTableNameKey = "reportSixExport.tableSix";
-					break;
+        case Reports.SIX:
+          prepData = this.prepareReportSixDataForExport(
+            resp as AnnexThreeViewEntity[]
+          );
+          localFileName = "reportSixExport.";
+          localTableNameKey = "reportSixExport.tableSix";
+          break;
 
-				case Reports.SEVEN:
-					prepData = this.prepareReportSevenDataForExport(resp as AnnexThreeViewEntity[]);
-					localFileName = "reportSevenExport.";
-					localTableNameKey = "reportSevenExport.tableSeven";
-					break;
+        case Reports.SEVEN:
+          prepData = this.prepareReportSevenDataForExport(
+            resp as AnnexThreeViewEntity[]
+          );
+          localFileName = "reportSevenExport.";
+          localTableNameKey = "reportSevenExport.tableSeven";
+          break;
 
-				case Reports.EIGHT:
-					prepData = this.prepareReportEightDataForExport(resp as AnnexThreeViewEntity[]);
-					localFileName = "reportEightExport.";
-					localTableNameKey = "reportEightExport.tableEight";
-					break;
+        case Reports.EIGHT:
+          prepData = this.prepareReportEightDataForExport(
+            resp as AnnexThreeViewEntity[]
+          );
+          localFileName = "reportEightExport.";
+          localTableNameKey = "reportEightExport.tableEight";
+          break;
 
-				case Reports.NINE:
-					prepData = this.prepareReportNineDataForExport(resp as AnnexThreeViewEntity[]);
-					localFileName = "reportNineExport.";
-					localTableNameKey = "reportNineExport.tableNine";
-					break;
+        case Reports.NINE:
+          prepData = this.prepareReportNineDataForExport(
+            resp as AnnexThreeViewEntity[]
+          );
+          localFileName = "reportNineExport.";
+          localTableNameKey = "reportNineExport.tableNine";
+          break;
 
-				case Reports.TEN:
-					prepData = this.prepareReportTenDataForExport(resp as AnnexThreeViewEntity[]);
-					localFileName = "reportTenExport.";
-					localTableNameKey = "reportTenExport.tableTen";
-					break;
+        case Reports.TEN:
+          prepData = this.prepareReportTenDataForExport(
+            resp as AnnexThreeViewEntity[]
+          );
+          localFileName = "reportTenExport.";
+          localTableNameKey = "reportTenExport.tableTen";
+          break;
 
-				case Reports.ELEVEN:
-					prepData = this.prepareReportElevenDataForExport(resp as AnnexThreeViewEntity[]);
-					localFileName = "reportElevenExport.";
-					localTableNameKey = "reportElevenExport.tableEleven";
-					break;
+        case Reports.ELEVEN:
+          prepData = this.prepareReportElevenDataForExport(
+            resp as AnnexThreeViewEntity[]
+          );
+          localFileName = "reportElevenExport.";
+          localTableNameKey = "reportElevenExport.tableEleven";
+          break;
 
-				case Reports.TWELVE:
-					prepData = this.prepareReportTwelveDataForExport(resp as AnnexThreeViewEntity[]);
-					localFileName = "reportTwelveExport.";
-					localTableNameKey = "reportTwelveExport.tableTwelve";
-					break;
+        case Reports.TWELVE:
+          prepData = this.prepareReportTwelveDataForExport(
+            resp as AnnexThreeViewEntity[]
+          );
+          localFileName = "reportTwelveExport.";
+          localTableNameKey = "reportTwelveExport.tableTwelve";
+          break;
 
-				case Reports.THIRTEEN:
-					prepData = this.prepareReportThirteenDataForExport(resp as AnnexThreeViewEntity[]);
-					localFileName = "reportTwelveExport.";
-					localTableNameKey = "reportTwelveExport.tableThirteen";
-					break;
+        case Reports.THIRTEEN:
+          prepData = this.prepareReportThirteenDataForExport(
+            resp as AnnexThreeViewEntity[]
+          );
+          localFileName = "reportTwelveExport.";
+          localTableNameKey = "reportTwelveExport.tableThirteen";
+          break;
 
-				default:
-					break;
-			}
+        default:
+          break;
+      }
 
-			let headers: string[] = [];
-			const titleKeys = Object.keys(prepData[0]);
-			for (const key of titleKeys) {
-				headers.push(
-					this.helperService.formatReqMessagesString(
-						localFileName + key,
-						[]
-					))
-			}
+      let headers: string[] = [];
+      const titleKeys = Object.keys(prepData[0]);
+      for (const key of titleKeys) {
+        headers.push(
+          this.helperService.formatReqMessagesString(localFileName + key, [])
+        );
+      }
 
-			const path = await this.dataExportService.generateCsvOrExcel(prepData, headers, this.helperService.formatReqMessagesString(
-				localTableNameKey,
-				[]
-			), dataExportQueryDto.fileType);
+      const path = await this.dataExportService.generateCsvOrExcel(
+        prepData,
+        headers,
+        this.helperService.formatReqMessagesString(localTableNameKey, []),
+        dataExportQueryDto.fileType
+      );
 
-			return path;
-		}
-		throw new HttpException(
-			this.helperService.formatReqMessagesString(
-				"reportExport.nothingToExport",
-				[]
-			),
-			HttpStatus.BAD_REQUEST
-		);
-	}
+      return path;
+    }
+    throw new HttpException(
+      this.helperService.formatReqMessagesString(
+        "reportExport.nothingToExport",
+        []
+      ),
+      HttpStatus.BAD_REQUEST
+    );
+  }
 
-	private prepareReportFiveDataForExport(data: ReportFiveViewEntity[]) {
-		const exportData: DataExportReportFiveDto[] = [];
+  private prepareReportFiveDataForExport(data: ReportFiveViewEntity[]) {
+    const exportData: DataExportReportFiveDto[] = [];
 
-		for (const report of data) {
-			const dto: DataExportReportFiveDto = new DataExportReportFiveDto();
-			dto.titleOfAction = report.titleOfAction;
-			dto.description = report.description;
-			dto.objective = report.objective;
-			dto.instrumentType = report.instrumentType;
-			dto.status = report.status;
-			dto.sector = report.sector;
-			dto.ghgsAffected = report.ghgsAffected;
-			dto.startYear = report.startYear;
-			dto.implementingEntities = report.implementingEntities;
-			dto.achievedGHGReduction = report.achievedGHGReduction;
-			dto.expectedGHGReduction = report.expectedGHGReduction;
+    for (const report of data) {
+      const dto: DataExportReportFiveDto = new DataExportReportFiveDto();
+      dto.titleOfAction = report.titleOfAction;
+      dto.description = report.description;
+      dto.objective = report.objective;
+      dto.instrumentType = report.instrumentType;
+      dto.status = report.status;
+      dto.sector = report.sector;
+      dto.ghgsAffected = report.ghgsAffected;
+      dto.startYear = report.startYear;
+      dto.implementingEntities = report.implementingEntities;
+      dto.achievedGHGReduction = report.achievedGHGReduction;
+      dto.expectedGHGReduction = report.expectedGHGReduction;
 
-			exportData.push(dto);
-		}
+      exportData.push(dto);
+    }
 
-		return exportData;
-	}
+    return exportData;
+  }
 
-	private prepareReportSixDataForExport(data: AnnexThreeViewEntity[]) {
-		const exportData: DataExportReportSixDto[] = [];
+  private prepareReportSixDataForExport(data: AnnexThreeViewEntity[]) {
+    const exportData: DataExportReportSixDto[] = [];
 
-		for (const report of data) {
-			const dto: DataExportReportSixDto = {
-				activityId: report.activityId,
-				sector: report.sector,
-				subSectors: report.subSector,
-				titleOfActivity: report.title,
-				description: report.description,
-				requiredAmountDomestic: report.requiredAmountDomestic,
-				requiredAmount: report.requiredAmount,
-				startYear: report.startYear,
-				endYear: report.endYear,
-				financialInstrument: report.internationalFinancialInstrument,
-				type: report.type,
-				techDevelopment: report.meansOfImplementation === ImpleMeans.TECH_DEV ? 'Yes' : 'No',
-				capacityBuilding: report.meansOfImplementation === ImpleMeans.CAPACITY_BUILD ? 'Yes' : 'No',
-				anchoredInNationalStrategy: report.anchoredInNationalStrategy ? 'Yes' : 'No',
-				supportChannel: report.internationalSupportChannel,
-				additionalInfo: report.etfDescription,
-			};
-			exportData.push(dto);
-		}
+    for (const report of data) {
+      const dto: DataExportReportSixDto = {
+        activityId: report.activityId,
+        sector: report.sector,
+        subSectors: report.subSector,
+        titleOfActivity: report.title,
+        description: report.description,
+        requiredAmountDomestic: report.requiredAmountDomestic,
+        requiredAmount: report.requiredAmount,
+        startYear: report.startYear,
+        endYear: report.endYear,
+        financialInstrument: report.internationalFinancialInstrument,
+        type: report.type,
+        techDevelopment:
+          report.meansOfImplementation === ImpleMeans.TECH_DEV ? "Yes" : "No",
+        capacityBuilding:
+          report.meansOfImplementation === ImpleMeans.CAPACITY_BUILD
+            ? "Yes"
+            : "No",
+        anchoredInNationalStrategy: report.anchoredInNationalStrategy
+          ? "Yes"
+          : "No",
+        supportChannel: report.internationalSupportChannel,
+        additionalInfo: report.etfDescription,
+      };
+      exportData.push(dto);
+    }
 
-		return exportData;
-	}
+    return exportData;
+  }
 
-	private prepareReportSevenDataForExport(data: AnnexThreeViewEntity[]) {
-		const exportData: DataExportReportSevenDto[] = [];
+  private prepareReportSevenDataForExport(data: AnnexThreeViewEntity[]) {
+    const exportData: DataExportReportSevenDto[] = [];
 
-		for (const report of data) {
-			const dto: DataExportReportSevenDto = {
-				activityId: report.activityId,
-				titleOfActivity: report.title,
-				description: report.description,
-				supportChannel: report.internationalSupportChannel,
-				recipientEntities: report.recipientEntities,
-				nationalImplementingEntities: report.nationalImplementingEntity,
-				internationalImplementingEntities: report.internationalImplementingEntity,
-				receivedAmountDomestic: report.receivedAmountDomestic,
-				receivedAmount: report.receivedAmount,
-				startYear: report.startYear,
-				endYear: report.endYear,
-				financialInstrument: report.internationalFinancialInstrument,
-				financingStatus: report.financingStatus,
-				type: report.type,
-				sector: report.sector,
-				subSectors: report.subSector,
-				techDevelopment: report.meansOfImplementation === ImpleMeans.TECH_DEV ? 'Yes' : 'No',
-				capacityBuilding: report.meansOfImplementation === ImpleMeans.CAPACITY_BUILD ? 'Yes' : 'No',
-				activityStatus: report.status,
-				additionalInfo: report.etfDescription,
-			  };
-			exportData.push(dto);
-		}
+    for (const report of data) {
+      const dto: DataExportReportSevenDto = {
+        activityId: report.activityId,
+        titleOfActivity: report.title,
+        description: report.description,
+        supportChannel: report.internationalSupportChannel,
+        recipientEntities: report.recipientEntities,
+        nationalImplementingEntities: report.nationalImplementingEntity,
+        internationalImplementingEntities:
+          report.internationalImplementingEntity,
+        receivedAmountDomestic: report.receivedAmountDomestic,
+        receivedAmount: report.receivedAmount,
+        startYear: report.startYear,
+        endYear: report.endYear,
+        financialInstrument: report.internationalFinancialInstrument,
+        financingStatus: report.financingStatus,
+        type: report.type,
+        sector: report.sector,
+        subSectors: report.subSector,
+        techDevelopment:
+          report.meansOfImplementation === ImpleMeans.TECH_DEV ? "Yes" : "No",
+        capacityBuilding:
+          report.meansOfImplementation === ImpleMeans.CAPACITY_BUILD
+            ? "Yes"
+            : "No",
+        activityStatus: report.status,
+        additionalInfo: report.etfDescription,
+      };
+      exportData.push(dto);
+    }
 
-		return exportData;
-	}
+    return exportData;
+  }
 
-	private prepareReportEightDataForExport(data: AnnexThreeViewEntity[]) {
-		const exportData: DataExportReportEightDto[] = [];
+  private prepareReportEightDataForExport(data: AnnexThreeViewEntity[]) {
+    const exportData: DataExportReportEightDto[] = [];
 
-		for (const report of data) {
-			const dto: DataExportReportEightDto = {
-				activityId: report.activityId,
-				sector: report.sector,
-				subSectors: report.subSector,
-				titleOfActivity: report.title,
-				description: report.description,
-				type: report.type,
-				technologyType: report.technologyType,
-				startYear: report.startYear,
-				endYear: report.endYear,
-				additionalInfo: report.etfDescription,
-			}
+    for (const report of data) {
+      const dto: DataExportReportEightDto = {
+        activityId: report.activityId,
+        sector: report.sector,
+        subSectors: report.subSector,
+        titleOfActivity: report.title,
+        description: report.description,
+        type: report.type,
+        technologyType: report.technologyType,
+        startYear: report.startYear,
+        endYear: report.endYear,
+        additionalInfo: report.etfDescription,
+      };
 
-			exportData.push(dto);
-		}
+      exportData.push(dto);
+    }
 
-		return exportData;
-	}
+    return exportData;
+  }
 
-	private prepareReportNineDataForExport(data: AnnexThreeViewEntity[]) {
-		const exportData: DataExportReportNineDto[] = [];
+  private prepareReportNineDataForExport(data: AnnexThreeViewEntity[]) {
+    const exportData: DataExportReportNineDto[] = [];
 
-		for (const report of data) {
-			const dto: DataExportReportNineDto = {
-				activityId: report.activityId,
-				titleOfActivity: report.title,
-				description: report.description,
-				technologyType: report.technologyType,
-				startYear: report.startYear,
-				endYear: report.endYear,
-				recipientEntities: report.recipientEntities,
-				nationalImplementingEntities: report.nationalImplementingEntity,
-				internationalImplementingEntities: report.internationalImplementingEntity,
-				type: report.type,
-				sector: report.sector,
-				subSectors: report.subSector,
-				activityStatus: report.status,
-				additionalInfo: report.etfDescription,
-			}
+    for (const report of data) {
+      const dto: DataExportReportNineDto = {
+        activityId: report.activityId,
+        titleOfActivity: report.title,
+        description: report.description,
+        technologyType: report.technologyType,
+        startYear: report.startYear,
+        endYear: report.endYear,
+        recipientEntities: report.recipientEntities,
+        nationalImplementingEntities: report.nationalImplementingEntity,
+        internationalImplementingEntities:
+          report.internationalImplementingEntity,
+        type: report.type,
+        sector: report.sector,
+        subSectors: report.subSector,
+        activityStatus: report.status,
+        additionalInfo: report.etfDescription,
+      };
 
-			exportData.push(dto);
-		}
+      exportData.push(dto);
+    }
 
-		return exportData;
-	}
+    return exportData;
+  }
 
-	private prepareReportTenDataForExport(data: AnnexThreeViewEntity[]) {
-		const exportData: DataExportReportTenDto[] = [];
+  private prepareReportTenDataForExport(data: AnnexThreeViewEntity[]) {
+    const exportData: DataExportReportTenDto[] = [];
 
-		for (const report of data) {
-			const dto: DataExportReportTenDto = {
-				activityId: report.activityId,
-				sector: report.sector,
-				subSectors: report.subSector,
-				titleOfActivity: report.title,
-				description: report.description,
-				type: report.type,
-				startYear: report.startYear,
-				endYear: report.endYear,
-				additionalInfo: report.etfDescription,
-			}
+    for (const report of data) {
+      const dto: DataExportReportTenDto = {
+        activityId: report.activityId,
+        sector: report.sector,
+        subSectors: report.subSector,
+        titleOfActivity: report.title,
+        description: report.description,
+        type: report.type,
+        startYear: report.startYear,
+        endYear: report.endYear,
+        additionalInfo: report.etfDescription,
+      };
 
-			exportData.push(dto);
-		}
+      exportData.push(dto);
+    }
 
-		return exportData;
-	}
+    return exportData;
+  }
 
-	private prepareReportElevenDataForExport(data: AnnexThreeViewEntity[]) {
-		const exportData: DataExportReportElevenDto[] = [];
+  private prepareReportElevenDataForExport(data: AnnexThreeViewEntity[]) {
+    const exportData: DataExportReportElevenDto[] = [];
 
-		for (const report of data) {
-			const dto: DataExportReportElevenDto = {
-				activityId: report.activityId,
-				titleOfActivity: report.title,
-				description: report.description,
-				startYear: report.startYear,
-				endYear: report.endYear,
-				recipientEntities: report.recipientEntities,
-				nationalImplementingEntities: report.nationalImplementingEntity,
-				internationalImplementingEntities: report.internationalImplementingEntity,
-				type: report.type,
-				sector: report.sector,
-				subSectors: report.subSector,
-				activityStatus: report.status,
-				additionalInfo: report.etfDescription,
-			}
-			exportData.push(dto);
-		}
+    for (const report of data) {
+      const dto: DataExportReportElevenDto = {
+        activityId: report.activityId,
+        titleOfActivity: report.title,
+        description: report.description,
+        startYear: report.startYear,
+        endYear: report.endYear,
+        recipientEntities: report.recipientEntities,
+        nationalImplementingEntities: report.nationalImplementingEntity,
+        internationalImplementingEntities:
+          report.internationalImplementingEntity,
+        type: report.type,
+        sector: report.sector,
+        subSectors: report.subSector,
+        activityStatus: report.status,
+        additionalInfo: report.etfDescription,
+      };
+      exportData.push(dto);
+    }
 
-		return exportData;
-	}
+    return exportData;
+  }
 
-	private prepareReportTwelveDataForExport(data: AnnexThreeViewEntity[]) {
-		const exportData: DataExportReportTwelveDto[] = [];
+  private prepareReportTwelveDataForExport(data: AnnexThreeViewEntity[]) {
+    const exportData: DataExportReportTwelveDto[] = [];
 
-		for (const report of data) {
-			const dto: DataExportReportTwelveDto = {
-				activityId: report.activityId,
-				titleOfActivity: report.title,
-				description: report.description,
-				startYear: report.startYear,
-				endYear: report.endYear,
-				recipientEntities: report.recipientEntities,
-				supportChannel: report.internationalSupportChannel,
-				requiredAmountDomestic: report.requiredAmountDomestic,
-				requiredAmount: report.requiredAmount,
-				activityStatus: report.status,
-				additionalInfo: report.etfDescription,
-			}
+    for (const report of data) {
+      const dto: DataExportReportTwelveDto = {
+        activityId: report.activityId,
+        titleOfActivity: report.title,
+        description: report.description,
+        startYear: report.startYear,
+        endYear: report.endYear,
+        recipientEntities: report.recipientEntities,
+        supportChannel: report.internationalSupportChannel,
+        requiredAmountDomestic: report.requiredAmountDomestic,
+        requiredAmount: report.requiredAmount,
+        activityStatus: report.status,
+        additionalInfo: report.etfDescription,
+      };
 
-			exportData.push(dto);
-		}
+      exportData.push(dto);
+    }
 
-		return exportData;
-	}
+    return exportData;
+  }
 
-	private prepareReportThirteenDataForExport(data: AnnexThreeViewEntity[]) {
-		const exportData: DataExportReportThirteenDto[] = [];
+  private prepareReportThirteenDataForExport(data: AnnexThreeViewEntity[]) {
+    const exportData: DataExportReportThirteenDto[] = [];
 
-		for (const report of data) {
-			const dto: DataExportReportThirteenDto = {
-				activityId: report.activityId,
-				titleOfActivity: report.title,
-				description: report.description,
-				startYear: report.startYear,
-				endYear: report.endYear,
-				recipientEntities: report.recipientEntities,
-				supportChannel: report.internationalSupportChannel,
-				receivedAmountDomestic: report.receivedAmountDomestic,
-				receivedAmount: report.receivedAmount,
-				activityStatus: report.status,
-				additionalInfo: report.etfDescription,
-			}
-			exportData.push(dto);
-		}
+    for (const report of data) {
+      const dto: DataExportReportThirteenDto = {
+        activityId: report.activityId,
+        titleOfActivity: report.title,
+        description: report.description,
+        startYear: report.startYear,
+        endYear: report.endYear,
+        recipientEntities: report.recipientEntities,
+        supportChannel: report.internationalSupportChannel,
+        receivedAmountDomestic: report.receivedAmountDomestic,
+        receivedAmount: report.receivedAmount,
+        activityStatus: report.status,
+        additionalInfo: report.etfDescription,
+      };
+      exportData.push(dto);
+    }
 
-		return exportData;
-	}
+    return exportData;
+  }
 }
