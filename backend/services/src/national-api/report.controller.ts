@@ -28,8 +28,11 @@ export class ReportController {
 	@ApiBearerAuth()
   @UseGuards(JwtAuthGuard, PoliciesGuardEx(true, Action.Read, SupportEntity, true))
   @Post(":tableNumber/query")
-  queryReportFiveData(@Param('tableNumber') tableNumber: Reports, @Body() query: QueryDto, @Request() req) {
-    return this.reportService.getTableData(tableNumber, query);
+  async queryReportFiveData(@Param('tableNumber') tableNumber: Reports, @Body() query: QueryDto, @Request() req) {
+    // console.log("req",tableNumber,query);
+    const result = await this.reportService.getTableData(tableNumber, query);
+    // console.log("result:", result);
+    return result;
   }
 
 	@ApiBearerAuth()
