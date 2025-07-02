@@ -1006,7 +1006,7 @@ const ActivityForm: React.FC<FormLoadProps> = ({ method }) => {
             setConnectedParentId(entityData.parentId ?? undefined);
           }
 
-          if (entityData.achievedGHGReductionAlternate !== undefined) {
+          if (entityData.achievedGHGReductionAlternate) {
             setIsAchievedAlternate(true);
           }
 
