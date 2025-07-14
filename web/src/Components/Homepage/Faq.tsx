@@ -213,6 +213,78 @@ const FAQ = () => {
             </div>
           )}
         </div>
+        <div className="faq-item">
+          <button
+            className={`faq-question ${openIndex === 8 ? 'active' : ''}`}
+            onClick={() => toggleItem(8)}
+          >
+            <span className={`chevron ${openIndex === 8 ? 'rotated' : ''}`}>
+              <ChevronDown />
+            </span>
+            <span className="question-text">{t('faqQ9')}</span>
+          </button>
+          {openIndex === 8 && (
+            <div className="faq-answer">
+              <Trans
+                i18nKey="homepage:faqA9"
+                components={{
+                  ul: <ul />,
+                  li: <li />,
+                  b: <strong />,
+                  a1: <a href="mailto:digital4planet@undp.org" />,
+                }}
+              />
+            </div>
+          )}
+        </div>
+        <div className="faq-item">
+          <button
+            className={`faq-question ${openIndex === 9 ? 'active' : ''}`}
+            onClick={() => toggleItem(9)}
+          >
+            <span className={`chevron ${openIndex === 9 ? 'rotated' : ''}`}>
+              <ChevronDown />
+            </span>
+            <span className="question-text">{t('faqQ10')}</span>
+          </button>
+          {openIndex === 9 && (
+            <div className="faq-answer">
+              <Trans
+                i18nKey="homepage:faqA10"
+                components={{
+                  ul: <ul />,
+                  li: <li />,
+                  b: <strong />,
+                  a1: <a href="mailto:digital4planet@undp.org" />,
+                }}
+              />
+            </div>
+          )}
+        </div>
+        <div className="faq-item">
+          <button
+            className={`faq-question ${openIndex === 10 ? 'active' : ''}`}
+            onClick={() => toggleItem(10)}
+          >
+            <span className={`chevron ${openIndex === 10 ? 'rotated' : ''}`}>
+              <ChevronDown />
+            </span>
+            <span className="question-text">{t('faqQ11')}</span>
+          </button>
+          {openIndex === 10 && (
+            <div className="faq-answer">
+              <Trans
+                i18nKey="homepage:faqA11"
+                components={{
+                  ul: <ul />,
+                  li: <li />,
+                  b: <strong />,
+                  a1: <a href="mailto:digital4planet@undp.org" />,
+                }}
+              />
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

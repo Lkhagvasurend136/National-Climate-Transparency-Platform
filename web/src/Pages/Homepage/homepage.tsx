@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
 import i18next from 'i18next';
-import sliderLogo from '../../Assets/Images/logo-slider.png';
+import sliderLogo from '../../Assets/Images/mrvlogo.svg';
 import heroImage1 from '../../Assets/Images/homepage_img.jpg';
 import heroImage2 from '../../Assets/Images/homepage_img2.jpg'; // Add your second image
 import heroImage3 from '../../Assets/Images/homepage_img3.jpg'; // Add your third image
