@@ -1,17 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import {
-  Row,
-  Col,
-  Input,
-  Button,
-  Form,
-  Select,
-  message,
-  Spin,
-  Tooltip,
-  Checkbox,
-  Space,
-} from 'antd';
+import { Row, Col, Input, Button, Form, Select, message, Spin, Tooltip, Checkbox } from 'antd';
 import { useEffect, useState } from 'react';
 import LayoutTable from '../../../Components/common/Table/layout.table';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -1160,6 +1148,7 @@ const ActivityForm: React.FC<FormLoadProps> = ({ method }) => {
         achievedGHGReductionAlternate: undefined,
       });
     }
+    handleValuesChange();
     setIsAchievedAlternate(e.target.checked);
   };
 
@@ -1839,12 +1828,10 @@ const ActivityForm: React.FC<FormLoadProps> = ({ method }) => {
                     </Col>
                   </Row>
                   <Row gutter={gutterSize}>
-                    <Col {...halfColumnBps}>
+                    <Col {...halfColumnBps} style={{ paddingRight: '10px' }}>
                       <Form.Item
                         label={
-                          <label className="form-item-header">
-                            {t('formHeader:achieved') + ' (Alternate)'}
-                          </label>
+                          <label className="form-item-header">{t('formHeader:achievedAlt')}</label>
                         }
                         name="achievedGHGReductionAlternate"
                         className="form-item-checkbox-input"
