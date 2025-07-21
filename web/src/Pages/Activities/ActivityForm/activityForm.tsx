@@ -676,6 +676,10 @@ const ActivityForm: React.FC<FormLoadProps> = ({ method }) => {
           );
         });
       }
+      // KL : To allow items not associated to a parent
+      if (!payload.parentId) {
+        payload.parentId = '';
+      }
       // ML - add the user input startYear and endYear and the calculated expectedTimeFrame to payload
       payload.startYear = parseInt(payload.startYear1);
       payload.endYear = parseInt(payload.endYear1);
@@ -991,7 +995,7 @@ const ActivityForm: React.FC<FormLoadProps> = ({ method }) => {
               parentId: entityData.parentId,
             });
             setParentType(entityData.parentType ?? undefined);
-            setConnectedParentId(entityData.parentId ?? undefined);
+            setConnectedParentId(entityData.parentId ?? '');
           }
 
           if (entityData.achievedGHGReductionAlternate) {
@@ -1372,7 +1376,7 @@ const ActivityForm: React.FC<FormLoadProps> = ({ method }) => {
                         </label>
                       }
                       name="parentId"
-                      rules={method !== 'create' ? undefined : [validation.required]}
+                      // rules={method !== 'create' ? undefined : [validation.required]}
                     >
                       <Select
                         size={'large'}
