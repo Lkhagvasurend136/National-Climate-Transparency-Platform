@@ -228,6 +228,10 @@ const ProgrammeForm: React.FC<FormLoadProps> = ({ method }) => {
         });
       }
 
+      // KL : To allow items not associated to a parent
+      if (!payload.actionId) {
+        payload.actionId = '';
+      }
       payload.investment = parseFloat(payload.investment);
 
       let response: any;
@@ -811,7 +815,7 @@ const ProgrammeForm: React.FC<FormLoadProps> = ({ method }) => {
                   <Form.Item
                     label={<label className="form-item-header">{t('selectActionHeader')}</label>}
                     name="actionId"
-                    rules={method !== 'create' ? undefined : [validation.required]}
+                    // rules={method === 'view' ? undefined : [validation.required]}
                   >
                     <Select
                       size={'large'}
