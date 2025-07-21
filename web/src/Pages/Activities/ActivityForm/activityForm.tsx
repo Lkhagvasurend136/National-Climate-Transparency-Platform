@@ -1,17 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import {
-  Row,
-  Col,
-  Input,
-  Button,
-  Form,
-  Select,
-  message,
-  Spin,
-  Tooltip,
-  Checkbox,
-  Space,
-} from 'antd';
+import { Row, Col, Input, Button, Form, Select, message, Spin, Tooltip, Checkbox } from 'antd';
 import { useEffect, useState } from 'react';
 import LayoutTable from '../../../Components/common/Table/layout.table';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -688,6 +676,10 @@ const ActivityForm: React.FC<FormLoadProps> = ({ method }) => {
           );
         });
       }
+      // KL : To allow items not associated to a parent
+      if (!payload.parentId) {
+        payload.parentId = '';
+      }
       // ML - add the user input startYear and endYear and the calculated expectedTimeFrame to payload
       payload.startYear = parseInt(payload.startYear1);
       payload.endYear = parseInt(payload.endYear1);
@@ -1003,7 +995,7 @@ const ActivityForm: React.FC<FormLoadProps> = ({ method }) => {
               parentId: entityData.parentId,
             });
             setParentType(entityData.parentType ?? undefined);
-            setConnectedParentId(entityData.parentId ?? undefined);
+            setConnectedParentId(entityData.parentId ?? '');
           }
 
           if (entityData.achievedGHGReductionAlternate) {
@@ -1160,6 +1152,7 @@ const ActivityForm: React.FC<FormLoadProps> = ({ method }) => {
         achievedGHGReductionAlternate: undefined,
       });
     }
+    handleValuesChange();
     setIsAchievedAlternate(e.target.checked);
   };
 
@@ -1383,7 +1376,7 @@ const ActivityForm: React.FC<FormLoadProps> = ({ method }) => {
                         </label>
                       }
                       name="parentId"
-                      rules={method !== 'create' ? undefined : [validation.required]}
+                      // rules={method !== 'create' ? undefined : [validation.required]}
                     >
                       <Select
                         size={'large'}
@@ -1839,12 +1832,10 @@ const ActivityForm: React.FC<FormLoadProps> = ({ method }) => {
                     </Col>
                   </Row>
                   <Row gutter={gutterSize}>
-                    <Col {...halfColumnBps}>
+                    <Col {...halfColumnBps} style={{ paddingRight: '10px' }}>
                       <Form.Item
                         label={
-                          <label className="form-item-header">
-                            {t('formHeader:achieved') + ' (Alternate)'}
-                          </label>
+                          <label className="form-item-header">{t('formHeader:achievedAlt')}</label>
                         }
                         name="achievedGHGReductionAlternate"
                         className="form-item-checkbox-input"
@@ -2016,7 +2007,7 @@ const ActivityForm: React.FC<FormLoadProps> = ({ method }) => {
                 </Col>
               </Row>
             </div>
-            {mtgStartYear && selectedGhg ? (
+            {isGasFlow && mtgStartYear && selectedGhg ? (
               <div className="form-section-card">
                 <Row>
                   <Col {...mtgTableHeaderBps} style={{ paddingTop: '6px' }}>

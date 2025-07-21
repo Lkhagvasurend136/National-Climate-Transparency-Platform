@@ -55,7 +55,7 @@ export class ReportService {
     } else {
       let direction: SupportDirection;
       let mitigationType: ActionType[];
-      let meansOfImplementation: ImpleMeans;
+      let meansOfImplementation: ImpleMeans[];
       // ML - removed ActionType.TRANSPARENCY in SIX and SEVEN and Add it to TWELVE and THIRTEEN
       switch (reportNumber) {
         case Reports.SIX:
@@ -66,7 +66,7 @@ export class ReportService {
             ActionType.CROSSCUT,
             ActionType.OTHER,
           ];
-          meansOfImplementation = ImpleMeans.FINANCE;
+          meansOfImplementation = [ImpleMeans.FINANCE];
           break;
         case Reports.SEVEN:
           direction = SupportDirection.RECEIVED;
@@ -76,7 +76,7 @@ export class ReportService {
             ActionType.CROSSCUT,
             ActionType.OTHER,
           ];
-          meansOfImplementation = ImpleMeans.FINANCE;
+          meansOfImplementation = [ImpleMeans.FINANCE];
           break;
         case Reports.EIGHT:
           direction = SupportDirection.NEEDED;
@@ -86,7 +86,7 @@ export class ReportService {
             ActionType.CROSSCUT,
             ActionType.OTHER,
           ];
-          meansOfImplementation = ImpleMeans.TECH_DEV;
+          meansOfImplementation = [ImpleMeans.TECH_DEV];
           break;
         case Reports.NINE:
           direction = SupportDirection.RECEIVED;
@@ -96,7 +96,7 @@ export class ReportService {
             ActionType.CROSSCUT,
             ActionType.OTHER,
           ];
-          meansOfImplementation = ImpleMeans.TECH_DEV;
+          meansOfImplementation = [ImpleMeans.TECH_DEV];
           break;
         case Reports.TEN:
           direction = SupportDirection.NEEDED;
@@ -106,7 +106,7 @@ export class ReportService {
             ActionType.CROSSCUT,
             ActionType.OTHER,
           ];
-          meansOfImplementation = ImpleMeans.CAPACITY_BUILD;
+          meansOfImplementation = [ImpleMeans.CAPACITY_BUILD];
           break;
         case Reports.ELEVEN:
           direction = SupportDirection.RECEIVED;
@@ -116,21 +116,22 @@ export class ReportService {
             ActionType.CROSSCUT,
             ActionType.OTHER,
           ];
-          meansOfImplementation = ImpleMeans.CAPACITY_BUILD;
+          meansOfImplementation = [ImpleMeans.CAPACITY_BUILD];
           break;
         case Reports.TWELVE:
           direction = SupportDirection.NEEDED;
           mitigationType = [ActionType.TRANSPARENCY];
-          meansOfImplementation = ImpleMeans.TRANSP;
+          meansOfImplementation = [ImpleMeans.TRANSP, ImpleMeans.CAPACITY_BUILD];
           break;
         case Reports.THIRTEEN:
           direction = SupportDirection.RECEIVED;
           mitigationType = [ActionType.TRANSPARENCY];
-          meansOfImplementation = ImpleMeans.TRANSP;
+          meansOfImplementation = [ImpleMeans.TRANSP, ImpleMeans.CAPACITY_BUILD];
           break;
       }
 
       let mitigationCondition = "";
+      let implimentationCondition ="";
 
       mitigationType.forEach((mitigation, index) => {
         mitigationCondition =
@@ -138,15 +139,20 @@ export class ReportService {
             ? `${mitigationCondition} OR annex_three.type = '${mitigation}'`
             : `annex_three.type = '${mitigation}'`;
       });
+      meansOfImplementation.forEach((implementation, index) => {
+        implimentationCondition =
+          index > 0
+            ? `${implimentationCondition} OR annex_three.meansOfImplementation = '${implementation}'`
+            : `annex_three.meansOfImplementation = '${implementation}'`;
+      });
 
       mitigationCondition = `(${mitigationCondition})`;
+      implimentationCondition = `(${implimentationCondition})`;
 
       const qb = this.annexThreeViewRepo
         .createQueryBuilder("annex_three")
         .where("annex_three.direction = :direction", { direction: direction })
-        .andWhere("annex_three.meansOfImplementation = :meansOfImplementation", {
-          meansOfImplementation: meansOfImplementation,
-        })
+        .andWhere(implimentationCondition)
         .andWhere(mitigationCondition);
       return qb;
     }

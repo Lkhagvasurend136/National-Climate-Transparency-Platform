@@ -442,7 +442,7 @@ const Dashboard = () => {
                     <Row gutter={30}>
                       <Col span={17}>{mitigationRecentChart.chartTitle}</Col>
                       <Col span={5} style={{ display: 'flex', alignItems: 'flex-end' }}>
-                        <Tag className="year-chip">{new Date().getFullYear()}</Tag>
+                        <Tag className="year-chip">{new Date().getFullYear() - 1}</Tag>
                       </Col>
                       <Col span={2}>
                         <InfoCircleOutlined

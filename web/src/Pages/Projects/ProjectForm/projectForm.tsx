@@ -224,6 +224,10 @@ const ProjectForm: React.FC<FormLoadProps> = ({ method }) => {
         });
       }
 
+      // KL : To allow items not associated to a parent
+      if (!payload.actionId) {
+        payload.actionId = '';
+      }
       payload.startYear = parseInt(payload.startYear);
       payload.endYear = parseInt(payload.endYear);
 
@@ -859,7 +863,7 @@ const ProjectForm: React.FC<FormLoadProps> = ({ method }) => {
                   <Form.Item
                     label={<label className="form-item-header">{t('selectProgrammeHeader')}</label>}
                     name="programmeId"
-                    rules={method !== 'create' ? undefined : [validation.required]}
+                    // rules={method === 'view' ? undefined : [validation.required]}
                   >
                     <Select
                       size={'large'}
