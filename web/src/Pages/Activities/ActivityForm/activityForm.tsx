@@ -1148,6 +1148,7 @@ const ActivityForm: React.FC<FormLoadProps> = ({ method }) => {
         achievedGHGReductionAlternate: undefined,
       });
     }
+    handleValuesChange();
     setIsAchievedAlternate(e.target.checked);
   };
 
