@@ -163,12 +163,13 @@ export class CreateCombinedViews1752577073121 implements MigrationInterface {
     await queryRunner.query(sum_json_recursively_fn);
     await queryRunner.query(sum_jsonb_agg_fn);
     await queryRunner.query(reset_startyear_fn);
-
+    
     await queryRunner.query(
-      "CREATE MATERIALIZED VIEW combined_ghg_reduction_view_entity AS" +
+        "CREATE MATERIALIZED VIEW combined_ghg_reduction_view_entity AS" +
         "\n" +
         combinedGhgReductionViewSQL
     );
+    await queryRunner.query(`CREATE UNIQUE INDEX idx_combined_ghg_reduction_view_entity_id ON combined_ghg_reduction_view_entity("ipccSubSector");`);
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {

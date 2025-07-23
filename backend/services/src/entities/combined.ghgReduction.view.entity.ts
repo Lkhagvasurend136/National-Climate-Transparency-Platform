@@ -1,7 +1,5 @@
 import { GHGS, IpccSubSector } from "../enums/shared.enum";
-import { ProjectionData } from "../dtos/projection.dto";
-import { ExtendedProjectionType } from "../enums/projection.enum";
-import { Column, Index, ViewColumn, ViewEntity } from "typeorm";
+import { Index, ViewColumn, ViewEntity } from "typeorm";
 
 export const combinedGhgReductionViewSQL = `
 SELECT
@@ -51,9 +49,6 @@ FROM
 })
 @Index("idx_combined_ghg_reduction_view_entity_id")
 export class CombinedGhgReductionViewEntity {
-  @ViewColumn()
-  id: number;
-
   @ViewColumn()
   ipccSubSector: IpccSubSector;
 
