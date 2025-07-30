@@ -14,6 +14,8 @@ import { ConfigurationSettingsType } from '../../Enums/configuration.enum';
 import { useConnection } from '../../Context/ConnectionContext/connectionContext';
 import { displayErrorMessage } from '../../Utils/errorMessageHandler';
 import { IpccSubSector } from '../../Enums/ipcc.subsector.enum';
+import { useUserContext } from '../../Context/UserInformationContext/userInformationContext';
+import { Role } from '../../Enums/role.enum';
 
 type DataEntry = {
   key: string;
@@ -40,6 +42,7 @@ const getDefaultSectorMapping = (): Record<string, string> => {
 const SectorConfigTable = () => {
   const { t } = useTranslation(['projection', 'configuration', 'entityAction']);
   const { get, post } = useConnection();
+  const { userInfoState } = useUserContext();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [selectedCategories, setSelectedCategories] = useState<Record<string, string>>({});
   const [isSectionOpen, setIsSectionOpen] = useState<SectionOpen>({
@@ -226,19 +229,21 @@ const SectorConfigTable = () => {
         </Col>
       </Row>
 
-      <Row gutter={20} className="action-row" justify={'end'} style={{ marginTop: '20px' }}>
-        <Col>
-          <Button
-            type="primary"
-            style={{ height: '35px', width: '90px' }}
-            block
-            onClick={handleUpdate}
-            loading={isLoading}
-          >
-            {t('entityAction:update')}
-          </Button>
-        </Col>
-      </Row>
+      {userInfoState?.userRole === Role.Root && (
+        <Row gutter={20} className="action-row" justify={'end'} style={{ marginTop: '20px' }}>
+          <Col>
+            <Button
+              type="primary"
+              style={{ height: '35px', width: '90px' }}
+              block
+              onClick={handleUpdate}
+              loading={isLoading}
+            >
+              {t('entityAction:update')}
+            </Button>
+          </Col>
+        </Row>
+      )}
     </div>
   );
 };

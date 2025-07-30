@@ -1,3 +1,4 @@
+import { ReportCategoryType } from "../enums/report.category.type.enum";
 import { ExtendedProjectionType } from "../enums/projection.enum";
 import { Index, ViewColumn, ViewEntity } from "typeorm";
 
@@ -78,7 +79,7 @@ GROUP BY
 export class AnnexTwoViewEntity {
   @Index()
   @ViewColumn()
-  category: string;
+  category: ReportCategoryType;
 
   @ViewColumn()
   withM: Array<number> | null;
