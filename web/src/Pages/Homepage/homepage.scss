@@ -81,16 +81,18 @@ $title-color: #3a8ab5;
 
     .ant-btn-primary {
       background: linear-gradient(to right,
-          #1890ff,
+          variables.$gradient-background-start,
           variables.$gradient-background-end );
       color: variables.$dark-text-color;
       border: none;
+      transition: all ease-out 0.3s;
     }
 
     .ant-btn-primary:hover {
       background: linear-gradient(to right,
           variables.$gradient-background-end,
-          #1890ff);
+          variables.$gradient-background-start);
+      transition: all ease-out 0.3s;
     }
   }
 
