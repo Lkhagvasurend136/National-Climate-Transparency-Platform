@@ -1,9 +1,9 @@
 export default () => ({
   stage: process.env.STAGE || "local",
   systemCountry: process.env.systemCountryCode || "NG",
-  systemCountryName: process.env.systemCountryName || "CountryX",
-  systemCountryGovernmentName: process.env.systemCountryGovernmentName || "Government of CountryX",
-  systemContinentName: process.env.systemContinentName || "CountryX",
+  systemCountryName: process.env.systemCountryName || "Qatar",
+  systemCountryGovernmentName: process.env.systemCountryGovernmentName || "Government of Qatar",
+  systemContinentName: process.env.systemContinentName || "Qatar",
   defaultCreditUnit: process.env.defaultCreditUnit || "ITMO",
   year: parseInt(process.env.REPORT_YEAR),
   dateTimeFormat: "DD LLLL yyyy @ HH:mm",
@@ -14,7 +14,7 @@ export default () => ({
     port: parseInt(process.env.DB_PORT) || 5432,
     username: process.env.DB_USER || "postgres",
     password: process.env.DB_PASSWORD || "root",
-    database: process.env.DB_NAME || "Transparency-System",
+    database: process.env.DB_NAME || "Transparency-System-Qatar",
     synchronize: process.env.NODE_ENV == "prod" ? true : true,
     autoLoadEntities: true,
     logging: ["error"],
@@ -26,7 +26,7 @@ export default () => ({
     encodePassword: process.env.ENCODE_PASSWORD || false
   },
   email: {
-    source: process.env.SOURCE_EMAIL || "info@xeptagon.com", 
+    source: process.env.SOURCE_EMAIL || "info@xeptagon.com",
     endpoint:
       process.env.SMTP_ENDPOINT ||
       "vpce-02cef9e74f152b675-b00ybiai.email-smtp.us-east-1.vpce.amazonaws.com",
