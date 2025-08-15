@@ -4,9 +4,14 @@
   background-color: variables.$background-color;
   height: 100vh;
 
-  .country-flag {
+   .country-flag {
     margin-top: 27px;
     margin-left: -8px;
+
+    img {
+      width: 15px;
+      height: auto;
+    }
   }
 
   .country-name {
@@ -67,16 +72,17 @@
         }
       }
 
-      .logo {
-        height: 60px;
-        width: 51px;
+        .logo {
+        height: 52px;
+        width: auto;
+        // width: 50px;
 
         img {
           object-fit: cover;
           height: auto;
           height: 78%;
           margin-top: 6px;
-          margin-right: 7px;
+          margin-right: 5px;
         }
       }
     }

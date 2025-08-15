@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { Menu, Layout, MenuProps, Row } from 'antd';
-import sliderLogo from '../../Assets/Images/mrvlogo.svg';
+import sliderLogo from '../../Assets/Images/qatarlogo.png';
 import { useNavigate } from 'react-router-dom';
 import './layout.sider.scss';
 import * as Icon from 'react-bootstrap-icons';
+import collapsedLogo from '../../Assets/Images/collapsedlogo.png';
 import {
   AppstoreOutlined,
   CloudDownloadOutlined,
@@ -81,9 +82,9 @@ const LayoutSider = (props: LayoutSiderProps) => {
           onClick={() => navigate('/dashboard', { replace: true })}
         >
           <div className="logo">
-            <img src={sliderLogo} alt="slider-logo" />
+            <img src={collapsed ? collapsedLogo : sliderLogo} alt="slider-logo" />
           </div>
-          {!collapsed && (
+          {/* {!collapsed && (
             <div>
               <div className="sider-logo-system-name">
                 <Row>
@@ -94,6 +95,18 @@ const LayoutSider = (props: LayoutSiderProps) => {
                 </Row>
               </div>
               <div className="country-name">{process.env.REACT_APP_COUNTRY_NAME || 'CountryX'}</div>
+            </div>
+          )} */}
+          {collapsed && (
+            <div className="country-flag">
+              <img
+                alt="Qatar flag"
+                src={
+                  // import.meta.env.VITE_APP_COUNTRY_FLAG_URL ||
+                  // "https://carbon-common-dev.s3.amazonaws.com/flag.png"
+                  'https://flagcdn.com/w320/qa.png'
+                }
+              />
             </div>
           )}
         </div>

@@ -17,11 +17,23 @@
 .login-container {
   height: 100vh;
   overflow-y: auto;
-  overflow-x: hidden;
+  // overflow-x: hidden;
   background-color: variables.$outside-background-color;
+  
+   .container-image {
+    background-image: url("../../Assets/Images/homepageqatar.webp");
+    background-image: image-set(
+      "../../Assets/Images/homepageqatar.webp" type("image/png"),
+      "../../Assets/Images/homepageqatar.webp" type("image/webp")
+    );
+    background-size: cover;
+    background-position: top !important;
+  }
 
   .login-img {
     height: 100%;
+    width: auto;
+    
   }
 
   .login-img-waiting {
@@ -48,7 +60,7 @@
     display: flex;
     flex: 1;
     text-align: left;
-    background-size: 150vh;
+    // background-size: 150vh;
 
     @media (max-width: variables.$lg-size) {
       text-align: center;
