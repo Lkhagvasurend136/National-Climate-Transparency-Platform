@@ -8,7 +8,26 @@ const DemoSite = () => {
   return (
     <div className="demo-site-container">
       <h1 className="header-title">{t('demoSite.title')}</h1>
-      <div className="demo-site-card"></div>
+      <div
+        className="demo-site-card"
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <h3
+          style={{
+            fontSize: '2rem',
+            padding: '2rem',
+            textAlign: 'center',
+            color: 'gray',
+            textTransform: 'lowercase',
+          }}
+        >
+          Will be Available Soon ...
+        </h3>
+      </div>
 
       <div className="demo-site-content">
         <div className="demo-site-text">
