@@ -277,7 +277,7 @@ $title-color: #3a8ab5;
 
       @media (max-width: 576px) {
         font-size: 2.4rem;
-        align-items: center;
+        text-align: center;
         margin-left: 0px;
       }
 
@@ -825,21 +825,21 @@ $title-color: #3a8ab5;
 
 .developer-resources-row {
   margin-bottom: 2rem;
-  max-width: 1300px;
-  margin: 0 auto;
-  padding-left: 36px;
+  max-width: 1360px;
+  margin: 20px auto 30px;
+  padding: 0 20px 0 44px;
   white-space: nowrap;
-  gap: 150px;
-  margin-top: 20px;
+  justify-content: space-between;
+  gap: 15px;
 }
 
 .resource-item {
-  padding: 1rem 0;
+  // padding: 1rem 0;
   height: 100%;
   display: flex;
   align-items: center;
-  justify-content: center;
-  text-align: center;
+  justify-content: space-betweens;
+  text-align: start;
 
 }
 
@@ -908,7 +908,7 @@ $title-color: #3a8ab5;
   }
 
   .resource-item {
-    padding: 0.75rem 0;
+    padding: 0 0;
     font-size: 0.9rem;
   }
 }

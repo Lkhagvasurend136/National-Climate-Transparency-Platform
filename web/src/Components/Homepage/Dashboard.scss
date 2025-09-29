@@ -597,6 +597,16 @@
   }
 }
 
+@media (max-width: 480px) {
+  .digital-public-good {
+    .image-containers {
+      .image-caption {
+        padding: 3px;
+      }
+    }
+  }
+}
+
 /*flow diagram*/
 /* ProcessFlow.css */
 // Dashboard.scss
