@@ -72,5 +72,9 @@
     "projectionUnvalidateSuccess": "Successfully Unvalidated the Projection Data",
     "projectionRevertSuccess": "Successfully Reverted to Baseline Projection Data",
 
-    "baselineUpdateSuccess": "Successfully Saved the Baseline Data"
+    "baselineUpdateSuccess": "Successfully Saved the Baseline Data",
+    
+    "sectorMappingUpdateSuccess": "Successfully Saved the Sector Mapping Data",
+    "sectorMappingNotFound": "No sector mapping configuration exists yet.",
+    "loadingDraftSectorMapping": "Initialized with default sector mapping values as a draft."
 }

@@ -22,6 +22,7 @@ export class AnalyticsService {
 			const queryBuilder = this.entityManager.createQueryBuilder()
 				.select('sector, COUNT("actionId") as count, MAX(action.updatedTime) as "latestTime"')
 				.from(ActionEntity, 'action')
+				.where('sector IS NOT NULL')
 				.groupBy('sector')
 				.orderBy('MAX(action.updatedTime)', 'DESC');
 
@@ -56,6 +57,7 @@ export class AnalyticsService {
 			const queryBuilder = this.entityManager.createQueryBuilder()
 				.select('sector, COUNT("projectId") as count, MAX(project.updatedTime) as "latestTime"')
 				.from(ProjectEntity, 'project')
+				.where('sector IS NOT NULL')
 				.groupBy('sector')
 				.orderBy('MAX(project.updatedTime)', 'DESC');
 
@@ -155,7 +157,8 @@ export class AnalyticsService {
 					Max(activity."updatedTime") as "latestTime"
 				FROM 
 					activity
-				WHERE activity."mitigationTimeline" IS NOT NULL
+				WHERE activity.sector IS NOT NULL
+					AND activity."mitigationTimeline" IS NOT NULL
 					AND (activity."mitigationTimeline" ->> 'startYear')::numeric <= ${year}
 				GROUP BY 
 					activity.sector
@@ -205,7 +208,8 @@ export class AnalyticsService {
 						Max(activity."updatedTime") as "latestTime"
 					FROM 
 						activity
-					WHERE activity."mitigationTimeline" IS NOT NULL
+					WHERE activity.sector IS NOT NULL
+						AND activity."mitigationTimeline" IS NOT NULL
 						AND (activity."mitigationTimeline" ->> 'startYear')::numeric <= ${previousYear}
 					GROUP BY 
 						activity.sector

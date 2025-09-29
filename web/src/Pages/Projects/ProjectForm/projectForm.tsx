@@ -224,6 +224,10 @@ const ProjectForm: React.FC<FormLoadProps> = ({ method }) => {
         });
       }
 
+      // KL : To allow items not associated to a parent
+      if (!payload.programmeId) {
+        payload.programmeId = '';
+      }
       payload.startYear = parseInt(payload.startYear);
       payload.endYear = parseInt(payload.endYear);
 
@@ -859,13 +863,13 @@ const ProjectForm: React.FC<FormLoadProps> = ({ method }) => {
                   <Form.Item
                     label={<label className="form-item-header">{t('selectProgrammeHeader')}</label>}
                     name="programmeId"
-                    rules={method !== 'create' ? undefined : [validation.required]}
+                    // rules={method === 'view' ? undefined : [validation.required]}
                   >
                     <Select
                       size={'large'}
                       style={{ fontSize: inputFontSize }}
                       allowClear
-                      disabled={method !== 'create'}
+                      disabled={method === 'view'}
                       showSearch
                       onChange={(value: any) => {
                         setProjectConnectedProgramme(value);
@@ -874,9 +878,12 @@ const ProjectForm: React.FC<FormLoadProps> = ({ method }) => {
                     >
                       {programmeList.map((program) => (
                         <Option key={program.id} value={program.id}>
-                          {program.id}
+                          {`(${program.id}) - ${program.title}`}
                         </Option>
                       ))}
+                      <Option key={0} value={''}>
+                        None
+                      </Option>
                     </Select>
                   </Form.Item>
                 </Col>

@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { Row, Col, Input, Button, Form, Select, message, Spin, Tooltip } from 'antd';
+import { Row, Col, Input, Button, Form, Select, message, Spin, Tooltip, Checkbox } from 'antd';
 import { useEffect, useState } from 'react';
 import LayoutTable from '../../../Components/common/Table/layout.table';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -50,7 +50,6 @@ import {
   mtgHalfColumnBps,
   mtgSaveButtonBps,
   mtgTableHeaderBps,
-  quarterColumnBps,
   shortButtonBps,
 } from '../../../Definitions/breakpoints/breakpoints';
 import { displayErrorMessage } from '../../../Utils/errorMessageHandler';
@@ -58,6 +57,8 @@ import { StoredData, UploadData } from '../../../Definitions/uploadDefinitions';
 import { useUserContext } from '../../../Context/UserInformationContext/userInformationContext';
 import ConfirmPopup from '../../../Components/Popups/Confirmation/confirmPopup';
 import { DeleteOutlined } from '@ant-design/icons';
+import { CheckboxChangeEvent } from 'antd/lib/checkbox';
+import { IpccSubSector } from '../../../Enums/ipcc.subsector.enum';
 
 const { Option } = Select;
 const { TextArea } = Input;
@@ -169,6 +170,9 @@ const ActivityForm: React.FC<FormLoadProps> = ({ method }) => {
   const [startYear1, setStartYear] = useState<number>();
   const [endYear1, setEndYear] = useState<number>();
 
+  // KL: Achieved GHG Reduction Alternate
+  const [isAchievedAlternate, setIsAchievedAlternate] = useState<boolean>(false);
+
   // Initialization Logic
 
   const mtgRange = 30;
@@ -197,6 +201,8 @@ const ActivityForm: React.FC<FormLoadProps> = ({ method }) => {
       if (id === undefined && method === 'create') {
         setMtgStartYear(0);
       }
+      // KL: set Mitigation Start year to activity startYear
+      // setMtgStartYear(startYear1 ?? 0);
     }
   };
 
@@ -672,6 +678,10 @@ const ActivityForm: React.FC<FormLoadProps> = ({ method }) => {
           );
         });
       }
+      // KL : To allow items not associated to a parent
+      if (!payload.parentId) {
+        payload.parentId = '';
+      }
       // ML - add the user input startYear and endYear and the calculated expectedTimeFrame to payload
       payload.startYear = parseInt(payload.startYear1);
       payload.endYear = parseInt(payload.endYear1);
@@ -958,12 +968,14 @@ const ActivityForm: React.FC<FormLoadProps> = ({ method }) => {
             comment: entityData.comment ?? undefined,
             ghgsAffected: entityData.ghgsAffected ?? undefined,
             achievedGHGReduction: entityData.achievedGHGReduction,
+            achievedGHGReductionAlternate: entityData.achievedGHGReductionAlternate ?? undefined,
             expectedGHGReduction: entityData.expectedGHGReduction,
             recipientEntities: entityData.recipientEntities ?? [],
             // ML - we now get the startYear and endYear directly from activity
             startYear1: entityData.startYear ?? undefined,
             endYear1: entityData.endYear ?? undefined,
             expectedTimeFrame: entityData.expectedTimeFrame ?? undefined,
+            ipccSubSector: entityData.ipccSubSector ?? undefined,
           });
 
           // ML - Just to be safe - set the original startYear and endYear with the values from activity entity
@@ -986,7 +998,11 @@ const ActivityForm: React.FC<FormLoadProps> = ({ method }) => {
               parentId: entityData.parentId,
             });
             setParentType(entityData.parentType ?? undefined);
-            setConnectedParentId(entityData.parentId ?? undefined);
+            setConnectedParentId(entityData.parentId ?? '');
+          }
+
+          if (entityData.achievedGHGReductionAlternate) {
+            setIsAchievedAlternate(true);
           }
 
           // Setting validation status
@@ -1132,6 +1148,16 @@ const ActivityForm: React.FC<FormLoadProps> = ({ method }) => {
   };
 
   // Dynamic Updates
+  // KL - To toggle Achieved Alternate Checkbox
+  const toggleAchievedAlternate = (e: CheckboxChangeEvent) => {
+    if (!e.target.checked) {
+      form.setFieldsValue({
+        achievedGHGReductionAlternate: undefined,
+      });
+    }
+    handleValuesChange();
+    setIsAchievedAlternate(e.target.checked);
+  };
 
   // Initializing mtg timeline data
 
@@ -1139,9 +1165,20 @@ const ActivityForm: React.FC<FormLoadProps> = ({ method }) => {
     if (method === 'create') {
       setDefaultTimelineValues();
     } else {
-      fetchMtgTimelineData();
+      try {
+        fetchMtgTimelineData();
+      } catch (error) {
+        console.error('Error fetching MTG timeline data:', error);
+        setDefaultTimelineValues();
+      }
     }
   }, [mtgStartYear, selectedGhg]);
+
+  useEffect(() => {
+    if (method === 'update' && mtgStartYear === 0 && startYear1) {
+      setMtgStartYear(startYear1);
+    }
+  }, [selectedGhg]);
 
   // Tracking Parent selection
 
@@ -1309,7 +1346,7 @@ const ActivityForm: React.FC<FormLoadProps> = ({ method }) => {
                       size="large"
                       style={{ fontSize: inputFontSize }}
                       allowClear
-                      disabled={method !== 'create'}
+                      disabled={method === 'view'}
                       showSearch
                       onChange={handleParentTypeSelect}
                     >
@@ -1353,13 +1390,13 @@ const ActivityForm: React.FC<FormLoadProps> = ({ method }) => {
                         </label>
                       }
                       name="parentId"
-                      rules={method !== 'create' ? undefined : [validation.required]}
+                      // rules={method !== 'create' ? undefined : [validation.required]}
                     >
                       <Select
                         size={'large'}
                         style={{ fontSize: inputFontSize }}
                         allowClear
-                        disabled={method !== 'create'}
+                        disabled={method === 'view'}
                         showSearch
                         onChange={handleParentIdSelect}
                       >
@@ -1374,10 +1411,13 @@ const ActivityForm: React.FC<FormLoadProps> = ({ method }) => {
                             >
                               {parent.hasChildProgrammes
                                 ? `${parent.id} : Attached to Programmes`
-                                : parent.id}
+                                : `${parent.id} - ${parent.title}`}
                             </span>
                           </Option>
                         ))}
+                        <Option key={0} value={''}>
+                          <span style={{ color: 'inherit' }}>None</span>
+                        </Option>
                       </Select>
                     </Form.Item>
                   </Col>
@@ -1485,123 +1525,161 @@ const ActivityForm: React.FC<FormLoadProps> = ({ method }) => {
                 </Col>
               </Row>
               <Row gutter={gutterSize}>
-                <Col {...quarterColumnBps}>
-                  <Form.Item
-                    label={
-                      <label className="form-item-header">
-                        {t('formHeader:sectorsAffectedHeader')}
-                      </label>
-                    }
-                    name="sector"
-                  >
-                    <Select size="large" style={{ fontSize: inputFontSize }} disabled></Select>
-                  </Form.Item>
-                </Col>
-                {(parentType === 'programme' || parentType === 'project') && (
-                  <Col {...quarterColumnBps}>
-                    <Form.Item
-                      label={
-                        <label className="form-item-header">
-                          {t('formHeader:subSectorsAffectedHeader')}
-                        </label>
-                      }
-                      name="affSubSectors"
-                    >
-                      <Select
-                        mode="multiple"
-                        size="large"
-                        style={{ fontSize: inputFontSize }}
-                        disabled
-                      ></Select>
-                    </Form.Item>
-                  </Col>
-                )}
-                {/* ML - since we now want users to select a startYear and endYear no matter of the parentType - we also add expectedTimeFrame which is calculated*/}
-                <Col {...quarterColumnBps}>
-                  <Form.Item
-                    label={
-                      <label className="form-item-header">{t('formHeader:startYearTitle')}</label>
-                    }
-                    name="startYear1"
-                    rules={[
-                      validation.required,
-                      ({ getFieldValue }) => ({
-                        // eslint-disable-next-line no-unused-vars
-                        validator(_, value) {
-                          if (!value || getFieldValue('endYear1') >= value) {
-                            return Promise.resolve();
+                <Col {...halfColumnBps}>
+                  <Row gutter={gutterSize}>
+                    <Col {...halfColumnBps}>
+                      <Form.Item
+                        label={
+                          <label className="form-item-header">
+                            {t('formHeader:sectorsAffectedHeader')}
+                          </label>
+                        }
+                        name="sector"
+                      >
+                        <Select size="large" style={{ fontSize: inputFontSize }} disabled></Select>
+                      </Form.Item>
+                    </Col>
+                    {(parentType === 'programme' || parentType === 'project') && (
+                      <Col {...halfColumnBps}>
+                        <Form.Item
+                          label={
+                            <label className="form-item-header">
+                              {t('formHeader:subSectorsAffectedHeader')}
+                            </label>
                           }
-                          return Promise.reject('Cannot be greater than End Year!');
-                        },
-                      }),
-                    ]}
-                    dependencies={['endYear1']}
-                  >
-                    <Select
-                      size="large"
-                      style={{ fontSize: inputFontSize }}
-                      allowClear
-                      disabled={isView}
-                      showSearch
-                      onChange={(value) => {
-                        handleStartYearChanges(value);
-                      }}
-                    >
-                      {yearsList.slice(1).map((year) => (
-                        <Option key={year} value={year}>
-                          {year}
-                        </Option>
-                      ))}
-                    </Select>
-                  </Form.Item>
+                          name="affSubSectors"
+                        >
+                          <Select
+                            mode="multiple"
+                            size="large"
+                            style={{ fontSize: inputFontSize }}
+                            disabled
+                          ></Select>
+                        </Form.Item>
+                      </Col>
+                    )}
+                    <Col {...halfColumnBps}>
+                      <Form.Item
+                        label={
+                          <label className="form-item-header">
+                            {t('formHeader:ipccSubSectorHeader')}
+                          </label>
+                        }
+                        name="ipccSubSector"
+                        rules={[validation.required]}
+                      >
+                        <Select
+                          showSearch
+                          size="large"
+                          style={{ fontSize: inputFontSize }}
+                          disabled={isView}
+                        >
+                          {Object.entries(IpccSubSector).map((ipccSubSector) => {
+                            return (
+                              <Option key={ipccSubSector[0]} value={ipccSubSector[1]}>
+                                {ipccSubSector[1]}
+                              </Option>
+                            );
+                          })}
+                        </Select>
+                      </Form.Item>
+                    </Col>
+                  </Row>
                 </Col>
-                <Col {...quarterColumnBps}>
-                  <Form.Item
-                    label={
-                      <label className="form-item-header">{t('formHeader:endYearTitle')}</label>
-                    }
-                    name="endYear1"
-                    rules={[
-                      validation.required,
-                      ({ getFieldValue }) => ({
-                        // eslint-disable-next-line no-unused-vars
-                        validator(_, value) {
-                          if (!value || getFieldValue('startYear1') <= value) {
-                            return Promise.resolve();
-                          }
-                          return Promise.reject('Cannot be lower than Start Year!');
-                        },
-                      }),
-                    ]}
-                    dependencies={['startYear1']}
-                  >
-                    <Select
-                      size="large"
-                      style={{ fontSize: inputFontSize }}
-                      allowClear
-                      disabled={isView}
-                      showSearch
-                      onChange={(value) => {
-                        setEndYear(value);
-                      }}
-                    >
-                      {yearsList.slice(1).map((year) => (
-                        <Option key={year} value={year}>
-                          {year}
-                        </Option>
-                      ))}
-                    </Select>
-                  </Form.Item>
-                </Col>
-                <Col {...quarterColumnBps}>
-                  <Form.Item
-                    label={
-                      <label className="form-item-header">{t('formHeader:timeFrameHeader')}</label>
-                    }
-                    name="expectedTimeFrame"
-                  >
-                    <Input type="number" className="form-input-box" disabled />
-                  </Form.Item>
+                <Col {...halfColumnBps}>
+                  <Row gutter={gutterSize}>
+                    {/* ML - since we now want users to select a startYear and endYear no matter of the parentType - we also add expectedTimeFrame which is calculated*/}
+                    <Col {...halfColumnBps}>
+                      <Form.Item
+                        label={
+                          <label className="form-item-header">
+                            {t('formHeader:startYearTitle')}
+                          </label>
+                        }
+                        name="startYear1"
+                        rules={[
+                          validation.required,
+                          ({ getFieldValue }) => ({
+                            // eslint-disable-next-line no-unused-vars
+                            validator(_, value) {
+                              if (!value || getFieldValue('endYear1') >= value) {
+                                return Promise.resolve();
+                              }
+                              return Promise.reject('Cannot be greater than End Year!');
+                            },
+                          }),
+                        ]}
+                        dependencies={['endYear1']}
+                      >
+                        <Select
+                          size="large"
+                          style={{ fontSize: inputFontSize }}
+                          allowClear
+                          disabled={isView}
+                          showSearch
+                          onChange={(value) => {
+                            handleStartYearChanges(value);
+                          }}
+                        >
+                          {yearsList.slice(1).map((year) => (
+                            <Option key={year} value={year}>
+                              {year}
+                            </Option>
+                          ))}
+                        </Select>
+                      </Form.Item>
+                    </Col>
+                    <Col {...halfColumnBps}>
+                      <Form.Item
+                        label={
+                          <label className="form-item-header">{t('formHeader:endYearTitle')}</label>
+                        }
+                        name="endYear1"
+                        rules={[
+                          validation.required,
+                          ({ getFieldValue }) => ({
+                            // eslint-disable-next-line no-unused-vars
+                            validator(_, value) {
+                              if (!value || getFieldValue('startYear1') <= value) {
+                                return Promise.resolve();
+                              }
+                              return Promise.reject('Cannot be lower than Start Year!');
+                            },
+                          }),
+                        ]}
+                        dependencies={['startYear1']}
+                      >
+                        <Select
+                          size="large"
+                          style={{ fontSize: inputFontSize }}
+                          allowClear
+                          disabled={isView}
+                          showSearch
+                          onChange={(value) => {
+                            setEndYear(value);
+                          }}
+                        >
+                          {yearsList.slice(1).map((year) => (
+                            <Option key={year} value={year}>
+                              {year}
+                            </Option>
+                          ))}
+                        </Select>
+                      </Form.Item>
+                    </Col>
+                    <Col {...halfColumnBps}>
+                      <Form.Item
+                        label={
+                          <label className="form-item-header">
+                            {t('formHeader:timeFrameHeader')}
+                          </label>
+                        }
+                        name="expectedTimeFrame"
+                      >
+                        <Input type="number" className="form-input-box" disabled />
+                      </Form.Item>
+                    </Col>
+                  </Row>
                 </Col>
               </Row>
               <Row gutter={gutterSize}>
@@ -1768,7 +1846,7 @@ const ActivityForm: React.FC<FormLoadProps> = ({ method }) => {
                           size="large"
                           style={{ fontSize: inputFontSize }}
                           allowClear
-                          disabled={method !== 'create'}
+                          disabled={method === 'view'}
                           showSearch
                           onChange={(value: GHGS) => setSelectedGhg(value)}
                         >
@@ -1802,6 +1880,32 @@ const ActivityForm: React.FC<FormLoadProps> = ({ method }) => {
                         name="expectedGHGReduction"
                       >
                         <Input type="number" className="form-input-box" disabled />
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                  <Row gutter={gutterSize}>
+                    <Col {...halfColumnBps} style={{ paddingRight: '10px' }}>
+                      <Form.Item
+                        label={
+                          <label className="form-item-header">{t('formHeader:achievedAlt')}</label>
+                        }
+                        name="achievedGHGReductionAlternate"
+                        className="form-item-checkbox-input"
+                      >
+                        <Input
+                          addonBefore={
+                            <Checkbox
+                              onChange={toggleAchievedAlternate}
+                              disabled={isView}
+                              checked={isAchievedAlternate}
+                            />
+                          }
+                          type="text"
+                          className="form-input-box"
+                          disabled={!isAchievedAlternate || isView}
+                          size="large"
+                          maxLength={30}
+                        />
                       </Form.Item>
                     </Col>
                   </Row>
@@ -1955,7 +2059,7 @@ const ActivityForm: React.FC<FormLoadProps> = ({ method }) => {
                 </Col>
               </Row>
             </div>
-            {mtgStartYear && selectedGhg ? (
+            {isGasFlow && mtgStartYear && selectedGhg ? (
               <div className="form-section-card">
                 <Row>
                   <Col {...mtgTableHeaderBps} style={{ paddingTop: '6px' }}>

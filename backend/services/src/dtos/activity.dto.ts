@@ -1,7 +1,7 @@
 import { ApiProperty, ApiPropertyOptional, getSchemaPath } from "@nestjs/swagger";
 import { ArrayMinSize, IsArray, IsBoolean, IsEnum, IsIn, IsNotEmpty, IsNumber, IsOptional, IsString, MaxLength, ValidateIf, Min, Max, } from "class-validator";
 import { ActivityStatus, ImpleMeans, Measure, SupportType, TechnologyType } from "../enums/activity.enum";
-import { EntityType, GHGS, IntImplementor, NatImplementor, Recipient } from "../enums/shared.enum";
+import { EntityType, GHGS, IntImplementor, IpccSubSector, NatImplementor, Recipient } from "../enums/shared.enum";
 import { DocumentDto } from "./document.dto";
 
 export class ActivityDto {
@@ -25,9 +25,8 @@ export class ActivityDto {
 	})
 	parentType: EntityType;
 
-	@IsNotEmpty()
 	@IsString()
-	@ApiProperty()
+	@ApiPropertyOptional()
 	parentId: string;
 
 	@ValidateIf((c) => c.measure)
@@ -91,6 +90,13 @@ export class ActivityDto {
 	})
 	recipientEntities: Recipient[];
 
+	@IsNotEmpty()
+	@IsEnum(IpccSubSector, {
+		message: "Invalid IPCC Sub-Sector. Supported following types:" + Object.values(IpccSubSector),
+	})
+	@ApiProperty({ enum: IpccSubSector })
+	ipccSubSector: IpccSubSector;
+
 	@IsOptional()
 	@IsBoolean()
 	@ApiPropertyOptional()
@@ -144,6 +150,12 @@ export class ActivityDto {
 	@IsNumber()
 	@ApiProperty()
 	achievedGHGReduction: number;
+
+	// KL - added achievedGHGReductionAlternate to allow user to input an alternate achievedGHGReduction
+	@ValidateIf((c) => c.achievedGHGReductionAlternate)
+	@IsString()
+	@ApiPropertyOptional()
+	achievedGHGReductionAlternate: string;
 
 	@ValidateIf((c) => c.expectedGHGReduction)
 	@IsNumber()
