@@ -44,6 +44,14 @@ const Homepage = () => {
 
   const heroImages = [heroImage1, heroImage2, heroImage3];
 
+  // Preload images to avoid white flash
+  useEffect(() => {
+    heroImages.forEach((src) => {
+      const img = new window.Image();
+      img.src = src;
+    });
+  }, [heroImages]);
+
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % heroImages.length);
@@ -172,12 +180,12 @@ const Homepage = () => {
       <FAQ />
 
       <Row className="developer-resources-row">
-        <Col xs={12} sm={6} md={6} lg={3} xl={3} className="Devresources">
+        <Col xs={12} sm={6} md={6} lg={5} xl={5} className="Devresources">
           <div className="resource-item">
             <b>{t('homepage:develperResources.title')}</b>
           </div>
         </Col>
-        <Col xs={12} sm={6} md={6} lg={3} xl={3} className="Devresources">
+        <Col xs={12} sm={5} md={5} lg={5} xl={5} className="Devresources">
           <u>
             <a
               href="https://github.com/undp/National-Climate-Transparency-Platform"
@@ -190,10 +198,10 @@ const Homepage = () => {
             </a>
           </u>
         </Col>
-        <Col xs={12} sm={6} md={6} lg={3} xl={3} className="Devresources">
+        <Col xs={12} sm={6} md={6} lg={6} xl={6} className="Devresources">
           <div className="resource-item connects">Companion Training Material</div>
         </Col>
-        <Col xs={12} sm={6} md={6} lg={3} xl={3} className="Devresources">
+        <Col xs={12} sm={6} md={6} lg={6} xl={6} className="Devresources">
           <div className="resource-item connects">Data Templates</div>
         </Col>
       </Row>
