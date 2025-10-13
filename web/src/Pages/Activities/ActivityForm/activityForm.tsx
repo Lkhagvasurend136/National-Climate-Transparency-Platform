@@ -1566,7 +1566,7 @@ const ActivityForm: React.FC<FormLoadProps> = ({ method }) => {
                           </label>
                         }
                         name="ipccSubSector"
-                        rules={[validation.required]}
+                        rules={isGasFlow ? [validation.required] : []}
                       >
                         <Select
                           showSearch
