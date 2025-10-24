@@ -159,7 +159,11 @@ const GhgConfigurations = () => {
         <div className="form-section-header">{t('growthRateConfigurationTitle')}</div>
         <Tabs defaultActiveKey="1" centered items={items} />
       </div>
-      <SectorMapping />
+      <div className="configuration-section-card">
+        <div className="form-section-title">{t('sectorMappingConfigurationTitle')}</div>
+        <div className="form-section-subheader">{t('sectorMappingDescription')}</div>
+        <SectorMapping />
+      </div>
     </div>
   );
 };
