@@ -36,7 +36,7 @@ const Login: FC<LoginPageProps> = (props: LoginPageProps) => {
   const ability = useContext(AbilityContext);
   const { state } = useLocation();
   const { i18n, t } = useTranslation(['common', 'login']);
-  const { post, updateToken, removeToken } = useConnection();
+  const { post, updateTokens } = useConnection();
   const { IsAuthenticated, setUserInfo, isTokenExpired, setIsTokenExpired } = useUserContext();
 
   // Login Page State
@@ -118,7 +118,7 @@ const Login: FC<LoginPageProps> = (props: LoginPageProps) => {
 
       if (response.status === 200 || response.status === 201) {
         if (showError) setShowError(false);
-        updateToken(response.data.access_token);
+        updateTokens(response.data.access_token, response.data.refresh_token);
         setUserInfo({
           id: response.data.id.toString(),
           userRole: response.data.role,
@@ -129,8 +129,8 @@ const Login: FC<LoginPageProps> = (props: LoginPageProps) => {
           subRolePermission: response.data.subRolePermission,
           ghgInventoryPermission: response.data.ghgInventoryPermission,
         });
-        removeToken();
         setIsTokenExpired(false);
+        console.log(IsAuthenticated(response.data.access_token));
         return IsAuthenticated(response.data.access_token)
           ? navigate(redirectLocation ? redirectLocation : '/dashboard', { replace: true })
           : navigate('/login');

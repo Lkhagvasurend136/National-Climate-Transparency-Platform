@@ -128,6 +128,10 @@ export const UserInformationContextProvider = ({ children }: React.PropsWithChil
       try {
         if (tokenVal) {
           const { exp } = jwt_decode(tokenVal) as any;
+          // console.log(exp);
+          // console.log(Date.now());
+          console.log(`${exp - Math.floor(Date.now() / 1000)} seconds left`);
+
           return Date.now() < exp * 1000;
         }
         return false;
