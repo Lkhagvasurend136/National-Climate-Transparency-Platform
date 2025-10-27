@@ -130,8 +130,8 @@ const Login: FC<LoginPageProps> = (props: LoginPageProps) => {
           ghgInventoryPermission: response.data.ghgInventoryPermission,
         });
         setIsTokenExpired(false);
-        console.log(IsAuthenticated(response.data.access_token));
-        return IsAuthenticated(response.data.access_token)
+        console.log(IsAuthenticated());
+        return IsAuthenticated()
           ? navigate(redirectLocation ? redirectLocation : '/dashboard', { replace: true })
           : navigate('/login');
       }
