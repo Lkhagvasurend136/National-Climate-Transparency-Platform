@@ -1,5 +1,5 @@
 import './reportCard.scss';
-import { Button, Col, Empty, Row } from 'antd';
+import { Button, Col, Row, Spin } from 'antd';
 import {
   exportBarBps,
   exportButtonBps,
@@ -61,10 +61,8 @@ const ReportCard: React.FC<Props> = ({
             </div>
           </Col>
         </Row>
-        <Row>
-          <Col span={24}>
-            <Empty description="No Report Data Available" />
-          </Col>
+        <Row className="spin-container">
+          <Spin size="large" />
         </Row>
       </div>
     );
