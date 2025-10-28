@@ -62,7 +62,7 @@ export const setupAxiosInterceptors = (serverURL: string) => {
       }
 
       try {
-        const response = await axios.post(`${serverURL}/auth/refresh`, {
+        const response = await axios.post(`${serverURL}/national/auth/refresh`, {
           refresh_token: refreshToken,
         });
 
