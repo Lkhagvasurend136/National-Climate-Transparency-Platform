@@ -11,6 +11,7 @@ import { ProjectionType } from '../../Enums/projection.enum';
 import { useUserContext } from '../../Context/UserInformationContext/userInformationContext';
 import { Role } from '../../Enums/role.enum';
 import SectorMapping from './SectorMapping/sectorMapping';
+import SectorYearConfiguration from './SectorYearConfiguration/SectorYearConfiguration';
 
 const GhgConfigurations = () => {
   // Page Context
@@ -160,8 +161,8 @@ const GhgConfigurations = () => {
         <Tabs defaultActiveKey="1" centered items={items} />
       </div>
       <div className="configuration-section-card">
-        <div className="form-section-title">{t('sectorMappingConfigurationTitle')}</div>
-        <div className="form-section-subheader">{t('sectorMappingDescription')}</div>
+        <div className="form-section-title">{t('sectorConfigurationTitle')}</div>
+        <SectorYearConfiguration />
         <SectorMapping />
       </div>
     </div>
