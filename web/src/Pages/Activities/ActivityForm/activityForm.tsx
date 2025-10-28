@@ -1558,32 +1558,34 @@ const ActivityForm: React.FC<FormLoadProps> = ({ method }) => {
                         </Form.Item>
                       </Col>
                     )}
-                    <Col {...halfColumnBps}>
-                      <Form.Item
-                        label={
-                          <label className="form-item-header">
-                            {t('formHeader:ipccSubSectorHeader')}
-                          </label>
-                        }
-                        name="ipccSubSector"
-                        rules={isGasFlow ? [validation.required] : []}
-                      >
-                        <Select
-                          showSearch
-                          size="large"
-                          style={{ fontSize: inputFontSize }}
-                          disabled={isView}
+                    {isGasFlow && (
+                      <Col {...halfColumnBps}>
+                        <Form.Item
+                          label={
+                            <label className="form-item-header">
+                              {t('formHeader:ipccSubSectorHeader')}
+                            </label>
+                          }
+                          name="ipccSubSector"
+                          rules={isGasFlow ? [validation.required] : []}
                         >
-                          {Object.entries(IpccSubSector).map((ipccSubSector) => {
-                            return (
-                              <Option key={ipccSubSector[0]} value={ipccSubSector[1]}>
-                                {ipccSubSector[1]}
-                              </Option>
-                            );
-                          })}
-                        </Select>
-                      </Form.Item>
-                    </Col>
+                          <Select
+                            showSearch
+                            size="large"
+                            style={{ fontSize: inputFontSize }}
+                            disabled={isView}
+                          >
+                            {Object.entries(IpccSubSector).map((ipccSubSector) => {
+                              return (
+                                <Option key={ipccSubSector[0]} value={ipccSubSector[1]}>
+                                  {ipccSubSector[1]}
+                                </Option>
+                              );
+                            })}
+                          </Select>
+                        </Form.Item>
+                      </Col>
+                    )}
                   </Row>
                 </Col>
                 <Col {...halfColumnBps}>
