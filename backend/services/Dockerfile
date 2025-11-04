@@ -1,5 +1,8 @@
 # Base image
-FROM node:16-alpine
+FROM node:18-alpine
+
+# Enable Corepack to manage Yarn versions (This comes with Node.js 16.9 and later)
+RUN corepack enable
 
 # Create app directory
 WORKDIR /app/backend/services
@@ -8,7 +11,9 @@ COPY ./backend/services/package.json ./
 COPY ./backend/services/yarn.lock ./
 
 # Install app dependencies
-RUN yarn run sls:installProd
+# RUN yarn run sls:installProd
+# This will allow updating the lockfile if needed
+RUN yarn install  
 
 # Bundle app source
 COPY ./backend/services .

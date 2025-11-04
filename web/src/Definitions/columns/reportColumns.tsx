@@ -10,6 +10,8 @@ import {
   ReportTwelveRecord,
 } from '../reportIndividualDefinitions';
 
+const now = new Date();
+
 export const getReportFiveColumns = (t: any) => {
   const reportFiveColumns = [
     {
@@ -67,6 +69,147 @@ export const getReportFiveColumns = (t: any) => {
   ];
 
   return reportFiveColumns;
+};
+
+export const getAnnexIIReportSevenColumns = (t: any) => {
+  const reportSevenColumns = [
+    {
+      title: t('sector'),
+      dataIndex: 'category',
+      key: 'category',
+      width: 150,
+    },
+    {
+      title: t('mostRecentYear'),
+      children: [
+        {
+          title: now.getFullYear(),
+          width: 100,
+          key: 'thisyear',
+          dataIndex: 'thisyear',
+        },
+      ],
+    },
+    {
+      title: t('projectionsofGhg'),
+      children: [
+        now.getFullYear() - (now.getFullYear() % 5) + 5 <= 2050 && {
+          title: now.getFullYear() - (now.getFullYear() % 5) + 5,
+          dataIndex: 'projection1',
+          key: 'projection1',
+          width: 100,
+        },
+        now.getFullYear() - (now.getFullYear() % 5) + 10 <= 2050 && {
+          title: now.getFullYear() - (now.getFullYear() % 5) + 10,
+          dataIndex: 'projection2',
+          key: 'projection2',
+          width: 100,
+        },
+        now.getFullYear() - (now.getFullYear() % 5) + 15 <= 2050 && {
+          title: now.getFullYear() - (now.getFullYear() % 5) + 15,
+          dataIndex: 'projection3',
+          key: 'projection3',
+          width: 100,
+        },
+      ],
+    },
+  ];
+
+  return reportSevenColumns;
+};
+
+export const getAnnexIIReportEightColumns = (t: any) => {
+  const reportEightColumns = [
+    {
+      title: t('sector'),
+      dataIndex: 'category',
+      key: 'category',
+      width: 150,
+    },
+    {
+      title: t('mostRecentYear'),
+      children: [
+        {
+          title: now.getFullYear(),
+          width: 100,
+          key: 'thisyear',
+          dataIndex: 'thisyear',
+        },
+      ],
+    },
+    {
+      title: t('projectionsofGhg'),
+      children: [
+        now.getFullYear() - (now.getFullYear() % 5) + 5 <= 2050 && {
+          title: now.getFullYear() - (now.getFullYear() % 5) + 5,
+          dataIndex: 'projection1',
+          key: 'projection1',
+          width: 100,
+        },
+        now.getFullYear() - (now.getFullYear() % 5) + 10 <= 2050 && {
+          title: now.getFullYear() - (now.getFullYear() % 5) + 10,
+          dataIndex: 'projection2',
+          key: 'projection2',
+          width: 100,
+        },
+        now.getFullYear() - (now.getFullYear() % 5) + 15 <= 2050 && {
+          title: now.getFullYear() - (now.getFullYear() % 5) + 15,
+          dataIndex: 'projection3',
+          key: 'projection3',
+          width: 100,
+        },
+      ],
+    },
+  ];
+
+  return reportEightColumns;
+};
+
+export const getAnnexIIReportNineColumns = (t: any) => {
+  const reportNineColumns = [
+    {
+      title: t('sector'),
+      dataIndex: 'category',
+      key: 'category',
+      width: 150,
+    },
+    {
+      title: t('mostRecentYear'),
+      children: [
+        {
+          title: now.getFullYear(),
+          width: 100,
+          key: 'thisyear',
+          dataIndex: 'thisyear',
+        },
+      ],
+    },
+    {
+      title: t('projectionsofGhg'),
+      children: [
+        now.getFullYear() - (now.getFullYear() % 5) + 5 <= 2050 && {
+          title: now.getFullYear() - (now.getFullYear() % 5) + 5,
+          dataIndex: 'projection1',
+          key: 'projection1',
+          width: 100,
+        },
+        now.getFullYear() - (now.getFullYear() % 5) + 10 <= 2050 && {
+          title: now.getFullYear() - (now.getFullYear() % 5) + 10,
+          dataIndex: 'projection2',
+          key: 'projection2',
+          width: 100,
+        },
+        now.getFullYear() - (now.getFullYear() % 5) + 15 <= 2050 && {
+          title: now.getFullYear() - (now.getFullYear() % 5) + 15,
+          dataIndex: 'projection3',
+          key: 'projection3',
+          width: 100,
+        },
+      ],
+    },
+  ];
+
+  return reportNineColumns;
 };
 
 export const getReportSixColumns = (t: any) => {
@@ -147,6 +290,12 @@ export const getReportSixColumns = (t: any) => {
       width: 1000,
     },
     { title: t('supportChannel'), dataIndex: 'supportChannel', key: 'supportChannel', width: 100 },
+    {
+      title: t('expectedUseImpact'),
+      dataIndex: 'achievedGHGReduction',
+      key: 'achievedGHGReduction',
+      width: 100,
+    },
     { title: t('additionalInfo'), dataIndex: 'additionalInfo', key: 'additionalInfo', width: 100 },
   ];
 
@@ -267,6 +416,12 @@ export const getReportSevenColumns = (t: any) => {
       width: 500,
     },
     { title: t('activityStatus'), dataIndex: 'activityStatus', key: 'activityStatus', width: 150 },
+    {
+      title: t('useImpactResults'),
+      dataIndex: 'achievedGHGReduction',
+      key: 'achievedGHGReduction',
+      width: 100,
+    },
     { title: t('additionalInfo'), dataIndex: 'additionalInfo', key: 'additionalInfo', width: 150 },
   ];
 
@@ -310,6 +465,12 @@ export const getReportEightColumns = (t: any) => {
           width: 50,
         },
       ],
+    },
+    {
+      title: t('expectedUseImpact'),
+      dataIndex: 'achievedGHGReduction',
+      key: 'achievedGHGReduction',
+      width: 100,
     },
     { title: t('additionalInfo'), dataIndex: 'additionalInfo', key: 'additionalInfo', width: 150 },
   ];
@@ -391,6 +552,12 @@ export const getReportNineColumns = (t: any) => {
     },
 
     { title: t('activityStatus'), dataIndex: 'activityStatus', key: 'activityStatus', width: 150 },
+    {
+      title: t('useImpactEstResults'),
+      dataIndex: 'achievedGHGReduction',
+      key: 'achievedGHGReduction',
+      width: 100,
+    },
     { title: t('additionalInfo'), dataIndex: 'additionalInfo', key: 'additionalInfo', width: 150 },
   ];
 
@@ -432,6 +599,12 @@ export const getReportTenColumns = (t: any) => {
           width: 50,
         },
       ],
+    },
+    {
+      title: t('expectedUseImpact'),
+      dataIndex: 'achievedGHGReduction',
+      key: 'achievedGHGReduction',
+      width: 150,
     },
     { title: t('additionalInfo'), dataIndex: 'additionalInfo', key: 'additionalInfo', width: 150 },
   ];
@@ -516,6 +689,12 @@ export const getReportElevenColumns = (t: any) => {
       key: 'activityStatus',
       width: 100,
     },
+    {
+      title: t('useImpactEstResults'),
+      dataIndex: 'achievedGHGReduction',
+      key: 'achievedGHGReduction',
+      width: 100,
+    },
     { title: t('additionalInfo'), dataIndex: 'additionalInfo', key: 'additionalInfo', width: 150 },
   ];
 
@@ -575,6 +754,12 @@ export const getReportTwelveColumns = (t: any) => {
       ],
     },
     { title: t('activityStatus'), dataIndex: 'activityStatus', key: 'activityStatus', width: 100 },
+    {
+      title: t('expectedUseImpact'),
+      dataIndex: 'achievedGHGReduction',
+      key: 'achievedGHGReduction',
+      width: 100,
+    },
     { title: t('additionalInfo'), dataIndex: 'additionalInfo', key: 'additionalInfo', width: 150 },
   ];
 
@@ -634,6 +819,12 @@ export const getReportThirteenColumns = (t: any) => {
       ],
     },
     { title: t('activityStatus'), dataIndex: 'activityStatus', key: 'activityStatus', width: 100 },
+    {
+      title: t('useImpactEstResults'),
+      dataIndex: 'achievedGHGReduction',
+      key: 'achievedGHGReduction',
+      width: 100,
+    },
     { title: t('additionalInfo'), dataIndex: 'additionalInfo', key: 'additionalInfo', width: 150 },
   ];
 

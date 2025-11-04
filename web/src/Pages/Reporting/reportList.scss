@@ -23,7 +23,7 @@
         width: 287px;
         border-width: 0;
         border-radius: 6px;
-        background-color: #e3f3fb;
+        background-color: rgba(138, 21, 56, 0.11);
         color: #7d858a;
         padding: 10px;
         margin-left: 3px;
@@ -46,4 +46,21 @@
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.ant-table-summary {
+    background-color: #fafafa;
+    // border-top: 1px solid #eee;
+
+    tr {
+        .ant-table-cell {
+            // font-weight: bold;
+            text-align: center;
+
+            &:first-child {
+                text-align: left;
+                padding-left: 40px;
+            }
+        }
+    }
 }

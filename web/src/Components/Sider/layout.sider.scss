@@ -1,17 +1,22 @@
-@import '../../Styles/variables.scss';
+@use '../../Styles/variables.scss';
 
 .layout-sider-container {
-  background-color: $background-color;
+  background-color: variables.$background-color;
   height: 100vh;
 
-  .country-flag {
+   .country-flag {
     margin-top: 27px;
     margin-left: -8px;
+
+    img {
+      width: 15px;
+      height: auto;
+    }
   }
 
   .country-name {
     font-size: 0.65rem;
-    color: $logo-text-color;
+    color: variables.$logo-text-color;
     margin-top: -2px;
     font-family: 'MuseoSans';
   }
@@ -22,8 +27,8 @@
     bottom: 15px;
     text-align: center;
     width: calc(100% - 20px);
-    border: 1px solid $primary-color;
-    color: $primary-color;
+    border: 1px solid variables.$primary-color;
+    color: variables.$primary-color;
     border-radius: 5px;
     height: 32px;
     vertical-align: middle;
@@ -53,7 +58,7 @@
         .title {
           font-family: 'MuseoSans';
           font-size: 13px;
-          color: $logo-text-color;
+          color: variables.$logo-text-color;
           font-weight: 700;
           margin-right: 5px;
         }
@@ -62,21 +67,22 @@
           font-weight: 100 !important;
           font-family: 'MuseoSans';
           font-size: 12px;
-          color: $logo-text-color;
+          color: variables.$logo-text-color;
           margin-top: -5px;
         }
       }
 
-      .logo {
-        height: 60px;
-        width: 51px;
+        .logo {
+        height: 52px;
+        width: auto;
+        // width: 50px;
 
         img {
           object-fit: cover;
           height: auto;
           height: 78%;
           margin-top: 6px;
-          margin-right: 7px;
+          margin-right: 5px;
         }
       }
     }
@@ -88,8 +94,8 @@
       padding-right: 8px;
 
       .ant-menu-item-selected {
-        background: linear-gradient(to right, $gradient-background-start, $gradient-background-end);
-        color: $dark-text-color;
+        background: linear-gradient(to right, variables.$gradient-background-start, variables.$gradient-background-end);
+        color: variables.$dark-text-color;
         border-top-right-radius: 22px;
         border-bottom-right-radius: 22px;
       }

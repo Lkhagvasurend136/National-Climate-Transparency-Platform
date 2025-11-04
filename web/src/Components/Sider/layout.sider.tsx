@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { Menu, Layout, MenuProps, Row } from 'antd';
-import sliderLogo from '../../Assets/Images/mrvlogo.svg';
+import sliderLogo from '../../Assets/Images/qatarlogo.png';
 import { useNavigate } from 'react-router-dom';
 import './layout.sider.scss';
 import * as Icon from 'react-bootstrap-icons';
+import collapsedLogo from '../../Assets/Images/collapsedlogo.png';
 import {
   AppstoreOutlined,
   CloudDownloadOutlined,
@@ -51,6 +52,8 @@ const LayoutSider = (props: LayoutSiderProps) => {
     getItem(t('nav:ghgInventory'), '', <CloudDownloadOutlined />, [
       getItem(t('nav:emissions'), 'emissions'),
       getItem(t('nav:projections'), 'projections'),
+      getItem(t('nav:combinedExpected'), 'combinedExpected'),
+      getItem(t('nav:combinedAchieved'), 'combinedAchieved'),
       getItem(t('nav:configurations'), 'configurations'),
     ]),
     getItem(t('nav:reporting'), 'reportings', <ClipboardMinus />),
@@ -79,19 +82,31 @@ const LayoutSider = (props: LayoutSiderProps) => {
           onClick={() => navigate('/dashboard', { replace: true })}
         >
           <div className="logo">
-            <img src={sliderLogo} alt="slider-logo" />
+            <img src={collapsed ? collapsedLogo : sliderLogo} alt="slider-logo" />
           </div>
-          {!collapsed && (
+          {/* {!collapsed && (
             <div>
               <div className="sider-logo-system-name">
                 <Row>
-                  <div className="title">{collapsed ? '' : 'NDC TRANSPARENCY'}</div>
+                  <div className="title">{collapsed ? '' : 'NATIONAL CLIMATE TRANSPARENCY'}</div>
                 </Row>
                 <Row>
-                  <div className="title-sub">{collapsed ? '' : 'SYSTEM'}</div>
+                  <div className="title-sub">{collapsed ? '' : 'PLATFORM'}</div>
                 </Row>
               </div>
               <div className="country-name">{process.env.REACT_APP_COUNTRY_NAME || 'CountryX'}</div>
+            </div>
+          )} */}
+          {collapsed && (
+            <div className="country-flag">
+              <img
+                alt="Qatar flag"
+                src={
+                  // import.meta.env.VITE_APP_COUNTRY_FLAG_URL ||
+                  // "https://carbon-common-dev.s3.amazonaws.com/flag.png"
+                  'https://flagcdn.com/w320/qa.png'
+                }
+              />
             </div>
           )}
         </div>

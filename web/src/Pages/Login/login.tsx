@@ -14,7 +14,7 @@ import ResetPassword from './resetPassword';
 import { UserState } from '../../Enums/user.enum';
 import { AvailableLanguages } from '../../Definitions/languageDefinitions';
 import TransparencyLogo from '../../Components/logo/transparencyLogo';
-import logoLarge from '../../Assets/Images/tran.webp';
+import logoLarge from '../../Assets/Images/homepageqatar.webp';
 
 const { useBreakpoint } = Grid;
 
@@ -149,11 +149,11 @@ const Login: FC<LoginPageProps> = (props: LoginPageProps) => {
         <Row className="login-container">
           {fullScreen && (
             <Col xl={15} flex="auto">
-              <div className="login-img-container">
-                <img // Full Res Image to be shown after loaded
+              <div className="login-img-container container-image">
+                {/* <img // Full Res Image to be shown after loaded
                   className="login-img"
                   src={logoLarge}
-                />
+                /> */}
                 <div className="gradient-overlay"></div>
                 <div className="text-ctn">
                   <span>
@@ -179,10 +179,8 @@ const Login: FC<LoginPageProps> = (props: LoginPageProps) => {
                 <Row className="centred-row">
                   <Col>
                     <div className="login-text-contents">
-                      <span className="login-text-sign">
-                        {t('common:login')} <br />
-                        <span className="login-text-welcome">{t('login:welcome-back')}</span>
-                      </span>
+                      <span className="login-text-sign">{t('common:login')}</span>
+                      <span className="login-text-welcome">{t('login:welcome-back')}</span>
                     </div>
                   </Col>
                 </Row>
@@ -288,8 +286,9 @@ const Login: FC<LoginPageProps> = (props: LoginPageProps) => {
                 </Form>
                 <Row className="language-row">
                   <Col span={24} className="language-section">
-                    <Select
+]                    <Select
                       placeholder="Search to Select"
+                      disabled
                       defaultValue={
                         localStorage.getItem('i18nextLng') !== null
                           ? localStorage.getItem('i18nextLng')

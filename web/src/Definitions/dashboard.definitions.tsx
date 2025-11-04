@@ -21,7 +21,7 @@ export type DashboardActionItem = {
 
 export const chartColorMappings = {
   sectors: [
-    '#16B1FF',
+    '#93D1D7',
     '#0468B1',
     '#FF9FDE',
     '#7FEABF',
@@ -32,6 +32,6 @@ export const chartColorMappings = {
     '#6B8E23',
     '#B44DD3',
   ],
-  finance: ['#FF8183', '#16B1FF'],
-  support: ['#FF8183', '#16B1FF'],
+  finance: ['#F5D486', '#FF8183'],
+  support: ['#F5D486', '#FF8183'],
 };

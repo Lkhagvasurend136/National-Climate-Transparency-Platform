@@ -1,26 +1,26 @@
-@import './variables.scss';
+@use './variables.scss';
 
 body {
-  background-color: $background-color;
-  font-family: $primary-font-family;
+  background-color: variables.$background-color;
+  font-family: variables.$primary-font-family;
   font-weight: 400;
 
   .ant-tooltip-inner {
     border-radius: 5px !important;
-    background-color: $primary-purple !important;
+    background-color: variables.$primary-color !important;
   }
 
   .ant-tooltip-arrow-content {
-    --antd-arrow-background-color: linear-gradient(to right bottom, #9155fd, #9155fd) !important;
+    --antd-arrow-background-color: linear-gradient(to right bottom, variables.$primary-color, variables.$primary-color) !important;
   }
 
   .login-language-selection-container .ant-select-selector {
-    color: $primary-color !important;
-    border: 1px solid $primary-color !important;
+    color: variables.$primary-color !important;
+    border: 1px solid variables.$primary-color !important;
   }
 
   .login-language-selection-container .ant-select-selection-item {
-    color: $primary-color !important;
+    color: variables.$primary-color !important;
   }
 
   .PhoneInput {
@@ -31,18 +31,26 @@ body {
       min-width: 0;
       border-radius: 5px !important;
       height: 40px;
-      border: 1px solid rgba($primary-purple, 0.8) !important;
+      border: 1px solid rgba(variables.$primary-color, 0.8) !important;
       outline: none;
     }
   }
 
   .programme-view .company-info .ant-progress-bg {
-    background-color: $primary-color !important;
+    background-color: variables.$primary-color !important;
   }
 }
 
+// style attribute {
+//     color: rgb(85, 253, 161);
+// }
+
+// .ant-tag .ant-tag-has-color .table-full-width-tag{
+//   background-color: variables.$primary-color !important;
+// }
+
 .form-section-card {
-  background-color: $outside-background-color;
+  background-color: variables.$outside-background-color;
   border-radius: 10px;
   width: 100%;
   margin-bottom: 10px;
@@ -53,7 +61,7 @@ body {
 }
 
 .form-section-timelineCard {
-  background-color: $outside-background-color;
+  background-color: variables.$outside-background-color;
   border-radius: 10px;
   width: 100%;
   max-height: 600px;
@@ -68,24 +76,45 @@ body {
 
 .layout-content-container {
   .ant-btn-primary {
-    background-color: $primary-color !important;
+    background-color: variables.$primary-color !important;
     color: #ffffff !important;
     border: none;
   }
 
   .ant-btn-primary[disabled] {
-    border-color: #d9d9d9 !important; 
+    border-color: #d9d9d9 !important;
     background: #f5f5f5 !important;
-    color: rgba(0, 0, 0, 0.25) !important; 
+    color: rgba(0, 0, 0, 0.25) !important;
   }
+  
+}
+.ant-menu-light .ant-menu-item:hover,
+.ant-menu-light .ant-menu-item-active {
+  color: variables.$primary-color;
+}
+.ant-menu-light .ant-menu-submenu-title:hover {
+  color: variables.$primary-color;
 }
 
+.projection-form .projection-timeline::-webkit-scrollbar-track {
+    background: #8a153808 !important;
+}
+
+.ant-menu-vertical .ant-menu-item::after, .ant-menu-vertical-left .ant-menu-item::after, .ant-menu-vertical-right .ant-menu-item::after, .ant-menu-inline .ant-menu-item::after {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    border-right: 3px solid #8A1538;
+}
+
+
 .title-container .main {
-  color: $primary-color !important;
+  color: variables.$primary-color !important;
 }
 
 .ant-upload-list-item-name {
-  color: $primary-color !important;
+  color: variables.$primary-color !important;
 }
 
 .ant-upload-list-item-thumbnail {
@@ -96,16 +125,21 @@ body {
 
 }
 
+
+.ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
+    background-color: rgba(variables.$primary-color, 0.1);
+}
+
 .login-language-selection {
   .ant-select-item {
-    color: $primary-color !important;
+    color: variables.$primary-color !important;
   }
 
   .ant-select-item-option-selected {
-    color: $primary-color !important;
+    color: variables.$primary-color !important;
 
     .ant-select-item-option-content {
-      color: $primary-color !important;
+      color: variables.$primary-color !important;
     }
   }
 }
@@ -118,30 +152,30 @@ body {
   line-height: 22px;
   padding-left: 0.125rem;
   padding: 0;
-  color: $primary-color !important;
+  color: variables.$primary-color !important;
 }
 
 .investment-body .actions .actions-icon-container .action-icons {
-  color: $primary-color !important;
+  color: variables.$primary-color !important;
   font-size: 16px;
 }
 
 .stastic-card-main-container .values-section .values-and-unit .value {
-  color: $primary-color !important;
+  color: variables.$primary-color !important;
 }
 
 .stastic-card-main-container .updated-on {
-  color: $primary-color !important;
-  background-color: $primary-color-light-bg !important;
+  color: variables.$primary-color !important;
+  background-color: variables.$primary-color-light-bg !important;
 }
 
 .content-container .body-title {
-  color: $primary-color !important;
+  color: variables.$primary-color !important;
 }
 
 .custom-tooltip .ant-tooltip-inner {
   border-radius: 5px !important;
-  background-color: $primary-color !important;
+  background-color: variables.$primary-color !important;
 }
 
 .custom-tooltip .ant-tooltip-arrow-content {
@@ -149,38 +183,38 @@ body {
 }
 
 .ant-menu {
-  background-color: $background-color;
+  background-color: variables.$background-color;
 }
 
 .ant-layout-header {
-  background-color: $background-color;
+  background-color: variables.$background-color;
 }
 
 .ant-layout {
-  background-color: $background-color;
+  background-color: variables.$background-color;
 }
 
 .ant-menu-submenu {
   .ant-menu {
-    background-color: $background-color;
+    background-color: variables.$background-color;
   }
 }
 
 .ant-menu-item {
-  background-color: $background-color;
+  background-color: variables.$background-color;
 }
 
 .ant-menu-sub {
-  background-color: $background-color;
+  background-color: variables.$background-color;
 }
 
 .ant-table-content {
-  font-family: $primary-font-family;
+  font-family: variables.$primary-font-family;
 }
 
 .ant-input {
   border-radius: 5px !important;
-  color: $common-input-color !important;
+  color: variables.$common-input-color !important;
 }
 
 .ant-select-selector {
@@ -188,7 +222,7 @@ body {
 }
 
 .ant-select-selection-item {
-  color: $common-input-color !important;
+  color: variables.$common-input-color !important;
 }
 
 .ant-btn {
@@ -243,7 +277,7 @@ body {
 
 .ant-form-item-explain-error {
   font-size: 13px;
-  color: $error-color;
+  color: variables.$error-color;
 }
 
 .ant-table-thead>tr>th:not(:last-child):not(.ant-table-selection-column):not(.ant-table-row-expand-icon-cell):not([colspan])::before {
@@ -257,7 +291,7 @@ body {
 
 .ant-form-item-label>label.ant-form-item-required:not(.ant-form-item-required-mark-optional)::before {
   margin-left: 0.2rem !important;
-  color: $error-color !important;
+  color: variables.$error-color !important;
 }
 
 .ant-picker {
@@ -283,7 +317,7 @@ body {
 }
 
 .filter-title {
-  color: $common-filter-color;
+  color: variables.$common-filter-color;
   font-family: 'Inter';
   font-style: normal;
   font-weight: 600;
@@ -296,11 +330,11 @@ body {
   font-weight: 400;
   font-size: 0.875rem;
   line-height: 22px;
-  color: $common-filter-color;
+  color: variables.$common-filter-color;
 }
 
 .ant-list-item {
-  color: $common-filter-color;
+  color: variables.$common-filter-color;
 }
 
 .ant-steps-vertical>.ant-steps-item>.ant-steps-item-container>.ant-steps-item-tail {
@@ -311,8 +345,8 @@ body {
   padding-bottom: 100px;
 
   .ant-btn-primary {
-    background-color: $primary-purple;
-    color: $dark-text-color;
+    background-color: variables.$primary-color;
+    color: variables.$dark-text-color;
     border: none;
   }
 
@@ -324,14 +358,15 @@ body {
     box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.25);
     min-width: 80px;
     box-shadow: none;
-    color: $border-default-btn;
+    color: variables.$border-default-btn;
+
     span {
       text-transform: uppercase;
     }
   }
 
   .upload-doc {
-    color: $common-input-color !important;
+    color: variables.$common-input-color !important;
   }
 }
 
@@ -345,20 +380,20 @@ body {
   }
 
   .body-title {
-    color: $primary-color;
+    color: variables.$primary-color;
     font-weight: 500;
     font-size: 1.2rem;
   }
 
   .body-sub-title {
-    color: $body-text-color;
+    color: variables.$body-text-color;
     font-weight: 400;
     font-size: 0.8rem;
   }
 }
 
 .content-card {
-  background-color: $outside-background-color;
+  background-color: variables.$outside-background-color;
   border-radius: 10px;
   width: 100%;
 
@@ -406,7 +441,7 @@ body {
 
 .action-menu {
   min-width: 120px;
-  color: $body-text-color;
+  color: variables.$body-text-color;
 
   .action-icon {
     margin-right: 12px;
@@ -414,7 +449,7 @@ body {
   }
 
   .anticon-edit {
-    color: $primary-color !important;
+    color: variables.$primary-color !important;
   }
 
   .anticon-delete {
@@ -428,7 +463,7 @@ body {
 }
 
 .login-language-selection-container .ant-select .ant-select-arrow {
-  color: $primary-color !important;
+  color: variables.$primary-color !important;
 }
 
 .ant-dropdown-menu-item-active {
@@ -472,11 +507,11 @@ body {
 }
 
 .apexcharts-canvas {
-  font-family: $primary-font-family !important;
+  font-family: variables.$primary-font-family !important;
 }
 
 .apexcharts-legend-text {
-  font-family: $primary-font-family !important;
+  font-family: variables.$primary-font-family !important;
 }
 
 .ant-tag {
@@ -514,7 +549,7 @@ body {
 
 .ant-modal-body {
   text-align: center;
-  color: $body-text-color;
+  color: variables.$body-text-color;
   font-size: 0.8rem;
 
   .ant-select-selector {
@@ -527,7 +562,7 @@ body {
     text-align: left;
 
     .req-ast {
-      color: $error-color;
+      color: variables.$error-color;
       padding-left: 5px;
     }
   }
@@ -546,9 +581,9 @@ body {
 
 .popup-header {
   text-align: center;
-  color: $title-text-color;
+  color: variables.$title-text-color;
   font-weight: 600;
-  font-family: $primary-font-family;
+  font-family: variables.$primary-font-family;
   font-size: 0.9rem;
   margin: 25px 20px -20px 20px;
 
@@ -565,18 +600,18 @@ body {
 
 .popup-success {
   .icon {
-    color: $primary-color !important;
+    color: variables.$primary-color !important;
   }
 
   .ant-btn-primary {
-    background: $primary-color !important;
-    border-radius: $primary-color !important;
+    background: variables.$primary-color !important;
+    border-radius: variables.$primary-color !important;
     border: none;
   }
 
   .ant-btn-default {
-    color: $body-text-color;
-    border-color: $body-text-color;
+    color: variables.$body-text-color;
+    border-color: variables.$body-text-color;
   }
 
   .ant-btn-primary[disabled] {
@@ -591,12 +626,12 @@ body {
 
 .popup-primary {
   .icon {
-    color: $primary-color !important;
+    color: variables.$primary-color !important;
   }
 
   .ant-btn-primary {
-    background: $primary-color !important;
-    border-radius: $primary-color !important;
+    background: variables.$primary-color !important;
+    border-radius: variables.$primary-color !important;
     border: none;
   }
 
@@ -607,15 +642,15 @@ body {
 
   .transfer-form {
     .ant-btn-primary {
-      background: $primary-color;
-      border-radius: $primary-color;
+      background: variables.$primary-color;
+      border-radius: variables.$primary-color;
       border: none;
     }
   }
 
   .ant-btn-default {
-    color: $body-text-color;
-    border-color: $body-text-color;
+    color: variables.$body-text-color;
+    border-color: variables.$body-text-color;
   }
 
   .ant-btn-primary[disabled] {
@@ -626,12 +661,12 @@ body {
 
 .popup-danger {
   .icon {
-    color: $error-color !important;
+    color: variables.$error-color !important;
   }
 
   .ant-btn-primary {
-    background: $error-color !important;
-    border-radius: $error-color !important;
+    background: variables.$error-color !important;
+    border-radius: variables.$error-color !important;
     border: none;
   }
 
@@ -642,15 +677,15 @@ body {
 
   .transfer-form {
     .ant-btn-primary {
-      background: $error-color;
-      border-radius: $error-color;
+      background: variables.$error-color;
+      border-radius: variables.$error-color;
       border: none;
     }
   }
 
   .ant-btn-default {
-    color: $body-text-color;
-    border-color: $body-text-color;
+    color: variables.$body-text-color;
+    border-color: variables.$body-text-color;
   }
 
   .ant-btn-primary[disabled] {
@@ -661,12 +696,12 @@ body {
 
 .popup-reject {
   .icon {
-    color: $error-color;
+    color: variables.$error-color;
   }
 
   .ant-btn-primary {
-    background: $error-color;
-    border-radius: $error-color;
+    background: variables.$error-color;
+    border-radius: variables.$error-color;
     border: none;
   }
 
@@ -676,8 +711,8 @@ body {
   }
 
   .ant-btn-default {
-    color: $body-text-color;
-    border-color: $body-text-color;
+    color: variables.$body-text-color;
+    border-color: variables.$body-text-color;
   }
 }
 
@@ -690,15 +725,15 @@ body {
   }
 
   .ant-btn-default {
-    color: $border-default-btn !important;
-    border-color: $border-default-btn !important;
+    color: variables.$border-default-btn !important;
+    border-color: variables.$border-default-btn !important;
   }
 }
 
 .ant-tag-processing {
-  color: $primary-color;
+  color: variables.$primary-color;
   background: rgba($color: #b9e2f4, $alpha: 0.4);
-  border-color: $primary-color !important;
+  border-color: variables.$primary-color !important;
 }
 
 .filter-section input {
@@ -764,12 +799,12 @@ body {
   .label {
     text-align: left;
     font-size: 0.9rem;
-    color: $body-text-color;
+    color: variables.$body-text-color;
   }
 
   .seperator {
     font-size: 1.2rem;
-    color: $line-colors;
+    color: variables.$line-colors;
   }
 
   .footer {
@@ -777,7 +812,7 @@ body {
     margin-top: 15px;
   }
 
-  color: $body-text-color;
+  color: variables.$body-text-color;
 
   label {
     font-size: 0.8rem;
@@ -788,7 +823,7 @@ body {
   }
 
   input {
-    color: $body-text-color;
+    color: variables.$body-text-color;
   }
 
   button {
@@ -798,11 +833,11 @@ body {
 }
 
 .color-error {
-  color: $error-color;
+  color: variables.$error-color;
 }
 
 .color-primary {
-  color: $primary-color;
+  color: variables.$primary-color;
 }
 
 .ant-input-number-input {
@@ -874,8 +909,8 @@ body {
   }
 
   .ant-message-error {
-    color: $error-color;
-    border: 1px solid $error-color;
+    color: variables.$error-color;
+    border: 1px solid variables.$error-color;
   }
 
   .ant-message-success {
@@ -885,7 +920,7 @@ body {
 }
 
 .ant-select-selection-item {
-  color: $body-text-color;
+  color: variables.$body-text-color;
 }
 
 .sub-text {
@@ -910,6 +945,7 @@ body {
   text-overflow: ellipsis;
   display: -webkit-box;
   -webkit-line-clamp: 1;
+  line-clamp: 1;
   -webkit-box-orient: vertical;
 }
 
@@ -926,8 +962,8 @@ body {
 
 .ant-btn-dangerous {
   color: #ffffff !important;
-  border-color: $danger-bg-color !important;
-  background: $danger-bg-color;
+  border-color: variables.$danger-bg-color !important;
+  background: variables.$danger-bg-color;
 }
 
 .ant-btn-dangerous.ant-btn-primary[disabled],
@@ -935,8 +971,8 @@ body {
 .ant-btn-dangerous.ant-btn-primary[disabled]:focus,
 .ant-btn-dangerous.ant-btn-primary[disabled]:active {
   color: #ffffff !important;
-  border-color: $danger-bg-color !important;
-  background: $danger-bg-color;
+  border-color: variables.$danger-bg-color !important;
+  background: variables.$danger-bg-color;
 }
 
 .hide {
@@ -944,18 +980,18 @@ body {
 }
 
 .required-mark {
-  color: $error-color;
+  color: variables.$error-color;
   vertical-align: super;
   margin-left: 5px;
   font-size: 10px;
 }
 
 .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
-  color: $primary-color;
+  color: variables.$primary-color;
 }
 
 .ant-tabs-tab:hover {
-  color: $primary-color;
+  color: variables.$primary-color;
 }
 
 .btnAddNewMainAct {
@@ -965,7 +1001,7 @@ body {
   border-radius: 10px;
   border: 1px solid rgba(58, 53, 65, 0.5);
   background: #fff;
-  color: $primary-color;
+  color: variables.$primary-color;
   text-align: center;
   font-family: Inter;
   font-size: 16px;
@@ -974,7 +1010,7 @@ body {
 }
 
 .btnAddNewMainAct:hover {
-  color: $primary-color;
+  color: variables.$primary-color;
 }
 
 .btnAddNewMainAct:disabled {
@@ -986,5 +1022,5 @@ body {
 }
 
 .ant-tabs-ink-bar {
-  background: $primary-color;
+  background: variables.$primary-color;
 }

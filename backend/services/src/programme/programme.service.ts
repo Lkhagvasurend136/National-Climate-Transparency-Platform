@@ -448,7 +448,7 @@ export class ProgrammeService {
 						await this.linkUpdatedProgrammeToAction(programmeUpdateDto.actionId, programmeUpdate, user, em);
 					} else if (currentProgramme.action && !programmeUpdateDto.actionId) {
 						await this.unlinkUpdatedProgrammeFromAction(programmeUpdate, user, em);
-					} else if (currentProgramme.action?.actionId != programmeUpdateDto.actionId) {
+					} else if (currentProgramme.action && currentProgramme.action?.actionId != programmeUpdateDto.actionId) {
 						await this.unlinkUpdatedProgrammeFromAction(programmeUpdate, user, em);
 						await this.linkUpdatedProgrammeToAction(programmeUpdateDto.actionId, programmeUpdate, user, em);
 					} else {
@@ -650,16 +650,16 @@ export class ProgrammeService {
 
 	//MARK: Unlink Updated Programme
 	async unlinkUpdatedProgrammeFromAction(updatedProgramme: ProgrammeEntity, user: User, em?: EntityManager) {
-
-		if (!updatedProgramme.action) {
-			throw new HttpException(
-				this.helperService.formatReqMessagesString(
-					"programme.programmeIsNotLinked",
-					[updatedProgramme.programmeId]
-				),
-				HttpStatus.BAD_REQUEST
-			);
-		}
+		// KL: We are now allowing the detached programmes
+		// if (!updatedProgramme.action) {
+		// 	throw new HttpException(
+		// 		this.helperService.formatReqMessagesString(
+		// 			"programme.programmeIsNotLinked",
+		// 			[updatedProgramme.programmeId]
+		// 		),
+		// 		HttpStatus.BAD_REQUEST
+		// 	);
+		// }
 
 		const achievementsToRemove = await this.kpiService.getAchievementsOfParentEntity(
 			updatedProgramme.action.actionId,
@@ -826,6 +826,16 @@ export class ProgrammeService {
 				this.helperService.formatReqMessagesString(
 					"programme.permissionDeniedForSector",
 					[programme.programmeId]
+				),
+				HttpStatus.FORBIDDEN
+			);
+		}
+
+		if (!programme.action) {
+			throw new HttpException(
+				this.helperService.formatReqMessagesString(
+					"programme.cannotvalidateOrphanItems",
+					[]
 				),
 				HttpStatus.FORBIDDEN
 			);

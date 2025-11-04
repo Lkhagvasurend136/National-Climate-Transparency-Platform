@@ -1,5 +1,7 @@
 import { Index, ViewColumn, ViewEntity } from "typeorm"
 
+// ML: change how we get startYear, endYear and expectedTimeFrame - we now getting it from activity (table t) instead from parent modules
+// I have just Aliased these 3 field we get from parent module to avoid Ambiguity in Column Names
 const expandedActivity = `
 Select 
 	t."activityId",
@@ -13,24 +15,22 @@ Select
 	t."recipientEntities",
 	t."status",
 	t."technologyType",
-	j."timeFrame",
-	j."endYear",
+	t."expectedTimeFrame" as "timeFrame",
+	t."endYear",
+	t."startYear",
+	t."achievedGHGReduction",
+	t."achievedGHGReductionAlternate",
 	p."subSector",
-	a."type",
-	CASE
-		WHEN t."parentType" = 'action' THEN a."startYear"
-		WHEN t."parentType" = 'programme' THEN p."startYear"
-		WHEN t."parentType" = 'project' THEN j."startYear"
-	END AS "startYear"
+	a."type"
 FROM activity t
 LEFT JOIN 
 	(
 		SELECT
 			"projectId",
-			"startYear",
-			"endYear",
+			"startYear" as "ProjectStartYear",
+			"endYear" as "ProjectEndYear",
 			"programmeId",
-			"expectedTimeFrame" as "timeFrame"
+			"expectedTimeFrame" as "ProjectTimeFrame"
 		FROM project
 	) 
 j ON j."projectId" = t."parentId"
@@ -38,7 +38,7 @@ LEFT JOIN
 	(
 		SELECT
 			"programmeId",
-			"startYear",
+			"startYear" as "ProgrammeStartYear",
 			"actionId",
 			"affectedSubSector" as "subSector"
 		FROM programme
@@ -48,13 +48,13 @@ LEFT JOIN
 	(
 		SELECT
 			"actionId",
-			"startYear",
+			"startYear" as "ActionStartYear",
 			"type"
 		FROM action
 	) 
 a ON a."actionId" = t."parentId" OR a."actionId" = p."actionId"
 `
-
+// ML: we are now getting startYear, endYear and expectedTimeFrame directly from activity
 export const annexThreeReportSQL = `
 SELECT
     s."supportId",
@@ -82,7 +82,9 @@ SELECT
 	e_act."subSector",
 	e_act."type",
 	e_act."endYear",
-	e_act."startYear"
+	e_act."startYear",
+	e_act."achievedGHGReduction",
+	e_act."achievedGHGReductionAlternate"
 FROM support s
 LEFT JOIN 
     (${expandedActivity})
@@ -166,11 +168,22 @@ export class AnnexThreeViewEntity {
 	@ViewColumn()
 	technologyType: string;
 
-	// From Deep Ancestors
-
-    @ViewColumn()
+	@ViewColumn()
     timeFrame: string;
+	
+	@ViewColumn()
+    startYear: string;
 
+	@ViewColumn()
+    endYear: string;
+
+	@ViewColumn()
+	achievedGHGReduction: string;
+
+	@ViewColumn()
+	achievedGHGReductionAlternate: string;
+
+	// From Deep Ancestors
     @ViewColumn()
 	recipientEntities: string[];
 
@@ -179,11 +192,5 @@ export class AnnexThreeViewEntity {
 
     @ViewColumn()
     type: string;
-
-	@ViewColumn()
-    startYear: string;
-
-	@ViewColumn()
-    endYear: string;
 
 }

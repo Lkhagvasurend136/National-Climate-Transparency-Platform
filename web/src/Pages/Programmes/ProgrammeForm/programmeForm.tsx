@@ -228,6 +228,10 @@ const ProgrammeForm: React.FC<FormLoadProps> = ({ method }) => {
         });
       }
 
+      // KL : To allow items not associated to a parent
+      if (!payload.actionId) {
+        payload.actionId = '';
+      }
       payload.investment = parseFloat(payload.investment);
 
       let response: any;
@@ -811,13 +815,13 @@ const ProgrammeForm: React.FC<FormLoadProps> = ({ method }) => {
                   <Form.Item
                     label={<label className="form-item-header">{t('selectActionHeader')}</label>}
                     name="actionId"
-                    rules={method !== 'create' ? undefined : [validation.required]}
+                    // rules={method === 'view' ? undefined : [validation.required]}
                   >
                     <Select
                       size={'large'}
                       style={{ fontSize: inputFontSize }}
                       allowClear
-                      disabled={method !== 'create'}
+                      disabled={method === 'view'}
                       showSearch
                       onChange={(value: any) => {
                         const selectedAction = actionList.find((action) => action.id === value);
@@ -841,10 +845,13 @@ const ProgrammeForm: React.FC<FormLoadProps> = ({ method }) => {
                           >
                             {action.hasChildActivities
                               ? `${action.id} : Attached to Activities`
-                              : action.id}
+                              : `${action.id} - ${action.title}`}
                           </span>
                         </Option>
                       ))}
+                      <Option key={0} value={''}>
+                        <span style={{ color: 'inherit' }}>None</span>
+                      </Option>
                     </Select>
                   </Form.Item>
                 </Col>
