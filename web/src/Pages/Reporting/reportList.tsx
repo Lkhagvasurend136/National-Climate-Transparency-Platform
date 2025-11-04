@@ -966,7 +966,7 @@ const reportList = () => {
         <div>
           {reportsToDisplay.map((TransparencyReport) => (
             <ReportCard
-              key={`Report_card_${TransparencyReport.report}`}
+              key={`Annex_${TransparencyReport.annex}_Report_card_${TransparencyReport.report}`}
               loading={loading}
               annex={TransparencyReport.annex}
               whichReport={TransparencyReport.report}
