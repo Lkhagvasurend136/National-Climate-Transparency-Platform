@@ -286,7 +286,6 @@ const Login: FC<LoginPageProps> = (props: LoginPageProps) => {
                 </Form>
                 <Row className="language-row">
                   <Col span={24} className="language-section">
-                    {/* We only support English for now in Seychelles, Since English is the default disable the option to select other locales */}
                     <Select
                       placeholder="Search to Select"
                       disabled
