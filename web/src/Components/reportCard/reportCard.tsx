@@ -27,7 +27,7 @@ interface Props {
     annexType: AnnexType,
     whichReport: ReportType
   ) => void;
-  handleTablePagination: (pagination: any, whichReport: ReportType) => void;
+  handleTablePagination: (pagination: any, annexType: AnnexType, whichReport: ReportType) => void;
   summary?: (data: any) => React.ReactNode; // Optional summary function
 }
 
@@ -48,7 +48,7 @@ const ReportCard: React.FC<Props> = ({
   summary,
 }) => {
   const handleTableChange = (pagination: any) => {
-    handleTablePagination(pagination, whichReport);
+    handleTablePagination(pagination, annex, whichReport);
   };
 
   if (!reportData) {
