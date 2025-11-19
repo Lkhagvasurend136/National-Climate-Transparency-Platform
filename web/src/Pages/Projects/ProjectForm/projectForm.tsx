@@ -42,6 +42,7 @@ import {
 import { displayErrorMessage } from '../../../Utils/errorMessageHandler';
 import { useUserContext } from '../../../Context/UserInformationContext/userInformationContext';
 import ConfirmPopup from '../../../Components/Popups/Confirmation/confirmPopup';
+import InfoKpi from '../../../Components/KPI/InfoKpi';
 
 const { Option } = Select;
 const { TextArea } = Input;
@@ -1342,7 +1343,7 @@ const ProjectForm: React.FC<FormLoadProps> = ({ method }) => {
                   removeKPI={removeKPI}
                 ></NewKpi>
               ))}
-              <Row justify={'start'}>
+              <Row justify={'space-between'}>
                 <Col span={2}>
                   {!isView && (
                     <Button
@@ -1353,6 +1354,9 @@ const ProjectForm: React.FC<FormLoadProps> = ({ method }) => {
                       <span className="kpi-add-text">{t('entityAction:addKPI')}</span>
                     </Button>
                   )}
+                </Col>
+                <Col span={20}>
+                  <InfoKpi />
                 </Col>
               </Row>
               <Row gutter={gutterSize}>
