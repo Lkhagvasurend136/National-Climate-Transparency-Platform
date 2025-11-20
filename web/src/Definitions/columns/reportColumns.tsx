@@ -1,4 +1,4 @@
-import { render } from 'sass';
+// import { render } from 'sass';
 import ScrollableList from '../../Components/ScrollableList/scrollableList';
 import { formatNumberWithThousandSeparators } from '../../Utils/utilServices';
 import { SectorYearConfigurationType } from '../configurationDefinitions';
@@ -731,7 +731,12 @@ export const getReportTwelveColumns = (t: any) => {
       key: 'titleOfActivity',
       width: 150,
     },
-    { title: t('descriptionOfActivity'), dataIndex: 'description', key: 'description', width: 150 },
+    {
+      title: t('descriptionOfActivityAlt'),
+      dataIndex: 'description',
+      key: 'description',
+      width: 150,
+    },
     {
       title: t('expectedTimeFrame'),
       children: [
@@ -796,7 +801,12 @@ export const getReportThirteenColumns = (t: any) => {
       key: 'titleOfActivity',
       width: 150,
     },
-    { title: t('descriptionOfActivity'), dataIndex: 'description', key: 'description', width: 150 },
+    {
+      title: t('descriptionOfActivityAlt'),
+      dataIndex: 'description',
+      key: 'description',
+      width: 150,
+    },
     {
       title: t('timeFrame'),
       children: [
