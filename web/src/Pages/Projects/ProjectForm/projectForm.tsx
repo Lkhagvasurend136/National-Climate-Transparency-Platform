@@ -1355,9 +1355,7 @@ const ProjectForm: React.FC<FormLoadProps> = ({ method }) => {
                     </Button>
                   )}
                 </Col>
-                <Col span={20}>
-                  <InfoKpi />
-                </Col>
+                <Col span={20}>{!isView && <InfoKpi />}</Col>
               </Row>
               <Row gutter={gutterSize}>
                 <Col span={24}>

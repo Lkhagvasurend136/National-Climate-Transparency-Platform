@@ -216,8 +216,12 @@ const Dashboard = () => {
         chartId: 4,
         chartTitle: t('financeChartTitle'),
         chartDescription: t('financeChartDescription'),
-        categories: ['Support Received', 'Support Needed'],
-        values: [financeChartData.stats.supportReceived, financeChartData.stats.supportNeeded],
+        categories: ['Support Received', 'Support Needs'],
+
+        values: [
+          financeChartData.stats.supportReceived,
+          financeChartData.stats.supportNeeded - financeChartData.stats.supportReceived,
+        ],
         lastUpdatedTime: financeChartData.lastUpdate,
       });
     } catch (error: any) {
