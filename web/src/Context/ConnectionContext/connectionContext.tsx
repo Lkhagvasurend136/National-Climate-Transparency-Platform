@@ -174,18 +174,31 @@ export const ConnectionContextProvider: FC<ConnectionContextProviderProps> = (
 
   // Token expiry check
   useEffect(() => {
+    let timeoutId: NodeJS.Timeout;
+
     if (token) {
       const { exp } = jwt_decode(token) as any;
-      if (Date.now() > exp * 1000) {
-        removeTokens();
+      const diff = exp * 1000 - Date.now();
+
+      if (diff <= 0) {
+        // Token already expired, try to refresh immediately
+        refreshTokenIfNeeded().catch(() => removeTokens());
       } else {
-        const diff = exp * 1000 - Date.now();
-        setTimeout(() => {
+        // Token valid, set timeout to refresh before expiry
+        const refreshDelay = Math.max(0, diff - 60000); // Refresh 1 minute before expiry
+
+        timeoutId = setTimeout(() => {
           console.log('Refreshing Token Automatically');
           refreshTokenIfNeeded().catch(() => removeTokens());
-        }, diff - 60000); // Refresh 1 minute before expiry
+        }, refreshDelay);
       }
     }
+
+    return () => {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+    };
   }, [token]);
 
   return (
