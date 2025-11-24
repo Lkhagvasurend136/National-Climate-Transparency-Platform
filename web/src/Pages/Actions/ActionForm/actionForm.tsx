@@ -1176,9 +1176,7 @@ const actionForm: React.FC<FormLoadProps> = ({ method }) => {
                     </Button>
                   )}
                 </Col>
-                <Col span={20}>
-                  <InfoKpi />
-                </Col>
+                <Col span={20}>{!isView && <InfoKpi />}</Col>
               </Row>
             </div>
             {method !== 'create' && (

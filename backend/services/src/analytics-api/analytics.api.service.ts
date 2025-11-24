@@ -5,7 +5,7 @@ import { EntityManager, Repository } from 'typeorm';
 import { InjectEntityManager, InjectRepository } from "@nestjs/typeorm";
 import { ProjectEntity } from "../entities/project.entity";
 import { ActivityEntity } from "../entities/activity.entity";
-import { FinanceNature, SupportDirection } from "../enums/support.enum";
+import { SupportDirection } from "../enums/support.enum";
 import { HelperService } from "../util/helpers.service";
 
 @Injectable()
@@ -92,17 +92,17 @@ export class AnalyticsService {
 			const results = await this.activityRepo.createQueryBuilder('activity')
 				.leftJoin('activity.support', 'support')
 				.select([
-					'COUNT(DISTINCT activity.activityId) as "totalActivities"',
-					'COUNT(DISTINCT CASE WHEN support.financeNature = :financeNature AND support.direction = :directionReceived THEN activity.activityId END) as "supportReceivedActivities"',
+					'COUNT(DISTINCT CASE WHEN support.direction = :directionReceived THEN activity.activityId END) as "supportReceivedActivities"',
+					'COUNT(DISTINCT CASE WHEN support.direction = :directionReceived OR support.direction = :directionNeeded THEN activity.activityId END) as "totalSupportedActivities"',
 					'GREATEST(MAX(activity."updatedTime"), MAX(support."updatedTime")) as "latestTime"'
 				])
-				.setParameter('financeNature', FinanceNature.INTERNATIONAL)
 				.setParameter('directionReceived', SupportDirection.RECEIVED)
+				.setParameter('directionNeeded', SupportDirection.NEEDED)
 				.getRawOne();
 
-			const totalActivities = results.totalActivities ? parseInt(results.totalActivities) : 0;
 			const supportReceivedActivities = results.supportReceivedActivities ? parseInt(results.supportReceivedActivities) : 0;
-			const supportNeededActivities = totalActivities - supportReceivedActivities;
+			const totalSupportedActivities = results.totalSupportedActivities ? parseInt(results.totalSupportedActivities) : 0;
+			const supportNeededActivities = totalSupportedActivities - supportReceivedActivities;
 
 			const latestTime = results.latestTime ? new Date(results.latestTime).getTime() / 1000 : 0;
 
