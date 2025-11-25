@@ -7,6 +7,8 @@ import { ProjectEntity } from "../entities/project.entity";
 import { ActivityEntity } from "../entities/activity.entity";
 import { SupportDirection } from "../enums/support.enum";
 import { HelperService } from "../util/helpers.service";
+import { ConfigurationSettingsService } from "../util/configurationSettings.service";
+import { ConfigurationSettingsType } from "../enums/configuration.settings.type.enum";
 
 @Injectable()
 export class AnalyticsService {
@@ -14,7 +16,8 @@ export class AnalyticsService {
 	constructor(
 		@InjectEntityManager() private entityManager: EntityManager,
 		@InjectRepository(ActivityEntity) private activityRepo: Repository<ActivityEntity>,
-		private helperService: HelperService
+		private helperService: HelperService,
+		private configService: ConfigurationSettingsService
 	) { }
 
 	async getClimateActionChart(): Promise<DataCountResponseDto> {
@@ -179,7 +182,7 @@ export class AnalyticsService {
 			// Convert latestTime to epoch if it's not null
 			const latestEpoch = latestTime ? Math.floor(latestTime.getTime() / 1000) : 0;
 
-			return new DataCountResponseDto({ sectors, totals }, latestEpoch);
+			return new DataCountResponseDto({ sectors, totals }, latestEpoch, year);
 		} catch (err) {
 			console.log(err);
 			throw new HttpException(
@@ -198,7 +201,16 @@ export class AnalyticsService {
 		const currentYear = new Date().getFullYear();
 
 		// Calculate the previous year
-		const previousYear = currentYear - 1;
+		let previousYear = currentYear - 1;
+
+		try {
+			const settings = await this.configService.getSetting(ConfigurationSettingsType.SECTOR_YEAR_CONFIGURATION);
+			if (settings && settings.mostRecentYear) {
+				previousYear = settings.mostRecentYear;
+			}
+		} catch (error) {
+			console.log('Error fetching configuration settings, using default previous year:', error);
+		}
 
 		try {
 			const query = `
@@ -229,7 +241,7 @@ export class AnalyticsService {
 			// Convert latestTime to epoch if it's not null
 			const latestEpoch = latestTime ? Math.floor(latestTime.getTime() / 1000) : 0;
 
-			return new DataCountResponseDto({ sectors, totals }, latestEpoch);
+			return new DataCountResponseDto({ sectors, totals }, latestEpoch, previousYear);
 		} catch (err) {
 			console.log(err);
 			throw new HttpException(
