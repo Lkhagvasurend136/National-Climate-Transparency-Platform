@@ -845,22 +845,22 @@ const reportList = () => {
                 <Table.Summary.Cell index={0}>Total with LULUCF</Table.Summary.Cell>
                 <Table.Summary.Cell index={1}>
                   {formatNumberWithThousandSeparators(
-                    data.reduce((acc, record) => acc + (parseInt(record.thisyear) || 0), 0)
+                    data.reduce((acc, record) => acc + (parseFloat(record.thisyear) || 0), 0)
                   )}
                 </Table.Summary.Cell>
                 <Table.Summary.Cell index={2}>
                   {formatNumberWithThousandSeparators(
-                    data.reduce((acc, record) => acc + (parseInt(record.projection1) || 0), 0)
+                    data.reduce((acc, record) => acc + (parseFloat(record.projection1) || 0), 0)
                   )}
                 </Table.Summary.Cell>
                 <Table.Summary.Cell index={3}>
                   {formatNumberWithThousandSeparators(
-                    data.reduce((acc, record) => acc + (parseInt(record.projection2) || 0), 0)
+                    data.reduce((acc, record) => acc + (parseFloat(record.projection2) || 0), 0)
                   )}
                 </Table.Summary.Cell>
                 <Table.Summary.Cell index={4}>
                   {formatNumberWithThousandSeparators(
-                    data.reduce((acc, record) => acc + (parseInt(record.projection3) || 0), 0)
+                    data.reduce((acc, record) => acc + (parseFloat(record.projection3) || 0), 0)
                   )}
                 </Table.Summary.Cell>
               </Table.Summary.Row>
@@ -868,13 +868,16 @@ const reportList = () => {
                 <Table.Summary.Cell index={0}>Total without LULUCF</Table.Summary.Cell>
                 <Table.Summary.Cell index={1}>
                   {formatNumberWithThousandSeparators(
-                    filteredData.reduce((acc, record) => acc + (parseInt(record.thisyear) || 0), 0)
+                    filteredData.reduce(
+                      (acc, record) => acc + (parseFloat(record.thisyear) || 0),
+                      0
+                    )
                   )}
                 </Table.Summary.Cell>
                 <Table.Summary.Cell index={2}>
                   {formatNumberWithThousandSeparators(
                     filteredData.reduce(
-                      (acc, record) => acc + (parseInt(record.projection1) || 0),
+                      (acc, record) => acc + (parseFloat(record.projection1) || 0),
                       0
                     )
                   )}
@@ -882,7 +885,7 @@ const reportList = () => {
                 <Table.Summary.Cell index={3}>
                   {formatNumberWithThousandSeparators(
                     filteredData.reduce(
-                      (acc, record) => acc + (parseInt(record.projection2) || 0),
+                      (acc, record) => acc + (parseFloat(record.projection2) || 0),
                       0
                     )
                   )}
@@ -890,7 +893,7 @@ const reportList = () => {
                 <Table.Summary.Cell index={4}>
                   {formatNumberWithThousandSeparators(
                     filteredData.reduce(
-                      (acc, record) => acc + (parseInt(record.projection3) || 0),
+                      (acc, record) => acc + (parseFloat(record.projection3) || 0),
                       0
                     )
                   )}
