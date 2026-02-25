@@ -1,0 +1,18 @@
+{
+  "dashboard": "Dashboard",
+  "actions": "Actions",
+  "programmes": "Programmes",
+  "projects": "Projects",
+  "activities": "Activities",
+  "support": "Support",
+  "ghgInventory": "GHG Emissions",
+  "reporting": "Reporting",
+  "faq": "FAQ Menu",
+  "companies": "Organisations",
+  "users": "Users",
+  "emissions": "Emissions",
+  "projections": "Projections",
+  "combinedExpected": "Combined - Expected",
+  "combinedAchieved": "Combined - Achieved",
+  "configurations": "Configurations"
+}

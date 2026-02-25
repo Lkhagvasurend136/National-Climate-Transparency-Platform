@@ -1,0 +1,17 @@
+{
+    "actionChartTitle" : "Climate Action",
+    "actionChartDescription": "Climate Action Description",
+    "projectChartTitle" : "Projects",
+    "projectChartDescription": "Climate Projects Description",
+    "supportChartTitle" : "Activities Supported",
+    "supportChartDescription": "Activities Supported Description",
+    "financeChartTitle" : "Financing for Activities",
+    "financeChartDescription": "Financing for Activities Description",
+    "mtgIndividualChartTitle" : "GHG Mitigation (ktCO2e)",
+    "mtgIndividualChartDescription": "GHG Mitigation (ktCO2e) Year Description",
+    "mtgRecentChartTitle" : "GHG Mitigation (ktCO2e) Most Recent Year",
+    "mtgRecentChartDescription": "GHG Mitigation (ktCO2e) Most Recent Year Description",
+    "noChartDataAvailable": "No Statistics Available",
+    "noActionsAvailable": "No Actions Available",
+    "recentYear": "2023"
+}
